@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sachin Lakshitha</title>
+    <link>https://sachinlakshitha.dev</link>
+    <description>Systems programmer · backend engineer. Going deeper than the abstraction until something real appears.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://sachinlakshitha.dev/rss.xml" rel="self" type="application/rss+xml"/>
+
+    <!-- Projects -->
+    <item>
+      <title>BACKTESTING ENGINE</title>
+      <description>A high-performance C++ orderbook reconstructor designed for nanosecond-level latency. It parses raw NASDAQ ITCH 5.0 binary feeds into a cache-aware limit order book using custom lock-free SPSC queues and object pools.</description>
+      <link>https://github.com/StereoSachiiii/backtesting_engine</link>
+      <guid isPermaLink="true">https://github.com/StereoSachiiii/backtesting_engine</guid>
+      <category>project</category>
+    </item>
+
+    <item>
+      <title>ROYAL LIQUOR</title>
+      <description>Full e-commerce platform built without frameworks. Custom router, custom dependency injection container, custom SPA renderer. 23 models, 26 services, layered middleware architecture.</description>
+      <link>https://github.com/StereoSachiiii/royal-liquor</link>
+      <guid isPermaLink="true">https://github.com/StereoSachiiii/royal-liquor</guid>
+      <category>project</category>
+    </item>
+
+    <item>
+      <title>RAG PIPELINE</title>
+      <description>Minimal retrieval-augmented generation pipeline. Uses Groq as inference provider for sub-200ms response times. Chunking strategy optimized for technical documentation.</description>
+      <link>https://github.com/StereoSachiiii/rag-pipeline</link>
+      <guid isPermaLink="true">https://github.com/StereoSachiiii/rag-pipeline</guid>
+      <category>project</category>
+    </item>
+
+    <!-- Writing -->
+    <item>
+      <title>Deadlines? — Banned C++ Features in Real-Time Systems</title>
+      <description>Why every banned feature in HFT has cost = f(runtime input). WCET analysis, store buffer drains, and making systems provably bounded.</description>
+      <link>https://medium.com/@niroshasulochini/deadlines-83d54ef287bf</link>
+      <guid isPermaLink="true">https://medium.com/@niroshasulochini/deadlines-83d54ef287bf</guid>
+      <category>writing</category>
+      <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
+    </item>
+
+    <item>
+      <title>How Mathematics is Predicting Wildfire Paths</title>
+      <description>ICAPS 2025 research review — Level Set Method combined with Bayesian correction for self-correcting wildfire boundary simulation.</description>
+      <link>https://medium.com/@niroshasulochini/how-mathematics-is-predicting-wildfire-paths-4fd00dcf3f58</link>
+      <guid isPermaLink="true">https://medium.com/@niroshasulochini/how-mathematics-is-predicting-wildfire-paths-4fd00dcf3f58</guid>
+      <category>writing</category>
+      <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
+    </item>
+
+    <item>
+      <title>Building an OS from Scratch</title>
+      <description>LuckyOS — a 16-bit operating system written in x86 Assembly. BIOS interrupts, CPUID, custom bootloader, and kernel from zero.</description>
+      <link>https://medium.com/@niroshasulochini/my-journey-into-the-machine-building-an-os-from-scratch-a87f1d41e11d</link>
+      <guid isPermaLink="true">https://medium.com/@niroshasulochini/my-journey-into-the-machine-building-an-os-from-scratch-a87f1d41e11d</guid>
+      <category>writing</category>
+      <pubDate>Fri, 27 Jun 2025 00:00:00 +0000</pubDate>
+    </item>
+
+    <item>
+      <title>MySQL Stored Procedures</title>
+      <description>Precompiled SQL, reduced network traffic, and encapsulated database logic. When to use them and when to avoid.</description>
+      <link>https://medium.com/@niroshasulochini/mysql-stored-procedures-4a75f1dcdfeb</link>
+      <guid isPermaLink="true">https://medium.com/@niroshasulochini/mysql-stored-procedures-4a75f1dcdfeb</guid>
+      <category>writing</category>
+      <pubDate>Mon, 27 Jan 2025 00:00:00 +0000</pubDate>
+    </item>
+
+    <item>
+      <title>The CIA Triad: The Cornerstone of Cyber Security</title>
+      <description>Confidentiality, Integrity, Availability — the framework for evaluating security measures across digital and physical environments.</description>
+      <link>https://medium.com/@niroshasulochini/the-cia-triad-the-cornerstone-of-cyber-security-9a99d0e65bea</link>
+      <guid isPermaLink="true">https://medium.com/@niroshasulochini/the-cia-triad-the-cornerstone-of-cyber-security-9a99d0e65bea</guid>
+      <category>writing</category>
+      <pubDate>Sun, 14 Jul 2024 00:00:00 +0000</pubDate>
+    </item>
+
+  </channel>
+</rss>
