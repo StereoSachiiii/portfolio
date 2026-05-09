@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Edit3, Mail, Rss, ArrowUpRight, Code2, Terminal, Cpu } from 'lucide-react';
+import { Github, Linkedin, SquarePen, Mail, Rss, ArrowUpRight, Code2, Terminal, Cpu } from 'lucide-react';
 
 const portfolioContent = {
     identity: {
@@ -12,7 +12,7 @@ const portfolioContent = {
     social: [
         { id: "github", icon: <Github size={18} />, url: "https://github.com/StereoSachiiii" },
         { id: "linkedin", icon: <Linkedin size={18} />, url: "https://linkedin.com/in/sachin-lakshitha-97425a306" },
-        { id: "medium", icon: <Edit3 size={18} />, url: "https://medium.com/@niroshasulochini" },
+        { id: "medium", icon: <SquarePen size={18} />, url: "https://medium.com/@niroshasulochini" },
         { id: "email", icon: <Mail size={18} />, url: "mailto:sachinlakshitha20021216@gmail.com" },
         { id: "rss", icon: <Rss size={18} />, url: "rss.xml" }
     ],
@@ -110,11 +110,11 @@ const App = () => {
           muted 
           loop 
           playsInline 
-          className="w-full h-full object-cover opacity-30 grayscale contrast-125"
+          className="w-full h-full object-cover opacity-40 mix-blend-screen grayscale"
         >
-          <source src="/vecteezy_clean-backdrop-loop_13695175.mov" type="video/mp4" />
+          <source src="/vecteezy_clean-backdrop-loop_13695175.mov" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/50 to-[#0a0a0a]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/20 via-[#0a0a0a]/60 to-[#0a0a0a]"></div>
         <div className="noise-overlay"></div>
       </div>
 
