@@ -118,13 +118,13 @@ export const data = {
         },
         {
           name: "MSVC",
-          icon: <TechIcon name="microsoft" />,
+          icon: <TechIcon name="visualstudio" />,
           desc: "Microsoft Visual C++ Compiler",
           proof: "Optimized the Windows build using MSVC-specific intrinsics like __lzcnt64 and __popcnt64. Managed cache-aligned memory using _aligned_malloc for deterministic heap behavior."
         },
         {
           name: "GCC",
-          icon: <TechIcon name="gnubash" />,
+          icon: <TechIcon name="gcc" />,
           desc: "GNU Compiler Collection",
           proof: "Used __builtin_expect (likely/unlikely) to hint the branch predictor on hot message paths. Verified assembly output with -march=native to ensure AVX2 vectorization was applied."
         },

@@ -66,47 +66,102 @@ export default function App() {
                 </nav>
 
                 {tab === 'projects' ? (
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 pb-20">
                     {data.projects.map((project, index) => {
                       const categoryStyles = {
-                        SYSTEMS: { border: 'border-black', tag: 'bg-black text-white' },
-                        OS: { border: 'border-gray-500', tag: 'bg-gray-600 text-white' },
-                        WEB: { border: 'border-gray-200', tag: 'bg-gray-200 text-black' },
-                        ML: { border: 'border-gray-200', tag: 'bg-gray-200 text-black' }
+                        SYSTEMS: { border: 'border-black', tag: 'bg-black text-white', accent: 'bg-black/5', gradient: 'from-black/10 to-transparent' },
+                        OS: { border: 'border-blue-500', tag: 'bg-blue-600 text-white', accent: 'bg-blue-50', gradient: 'from-blue-500/10 to-transparent' },
+                        WEB: { border: 'border-orange-500', tag: 'bg-orange-600 text-white', accent: 'bg-orange-50', gradient: 'from-orange-500/10 to-transparent' },
+                        ML: { border: 'border-purple-500', tag: 'bg-purple-600 text-white', accent: 'bg-purple-50', gradient: 'from-purple-500/10 to-transparent' }
                       };
                       const style = categoryStyles[project.category] || categoryStyles.WEB;
 
                       return (
                         <motion.div
                           key={project.id}
-                          initial={{ opacity: 0, y: 10 }}
+                          initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
+                          transition={{ delay: index * 0.1, duration: 0.4 }}
                           onClick={() => {
                             setSelectedProject(project);
                             setProjectView("overview");
                           }}
-                          className={`group cursor-pointer border-l-[3px] ${style.border} border-y border-r border-black/5 rounded-lg p-5 bg-white hover:bg-black/[0.01] transition-all duration-300 flex justify-between items-center gap-4`}
+                          className="group relative cursor-pointer flex flex-col h-full bg-white border border-black/10 rounded-2xl overflow-hidden hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-1.5 transition-all duration-500"
                         >
-                          <div className="flex-1 space-y-1 w-full">
-                            <div className="flex items-center gap-3">
-                              <span className={`text-[8px] font-mono font-bold tracking-[0.2em] px-1.5 py-0.5 rounded-sm uppercase ${style.tag}`}>
-                                {project.category}
-                              </span>
+                          {/* Card Header / Visual Area */}
+                          <div className={`h-36 w-full ${style.accent} relative flex items-center justify-center overflow-hidden`}>
+                            {/* Abstract Background Elements */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} opacity-50`}></div>
+                            <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-500">
+                              <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                             </div>
                             
-                            <div className="flex items-baseline gap-4">
-                              <h3 className="text-xl font-bold tracking-tighter text-black group-hover:text-black transition-colors leading-tight">
-                                {project.title}
-                              </h3>
-                              <p className="text-black/40 text-[12px] leading-relaxed max-w-xl font-medium line-clamp-1">
-                                {project.tags}
-                              </p>
+                            <div className="z-10 flex flex-col items-center text-center px-4">
+                              <span className={`text-[8px] font-mono font-bold tracking-[0.4em] px-2.5 py-1 rounded-full uppercase mb-2.5 ${style.tag} shadow-lg shadow-black/5`}>
+                                {project.category}
+                              </span>
+                              {project.highlight && (
+                                <div className="text-black font-bold text-xs md:text-sm tracking-tighter bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-lg border border-white/20 shadow-xl shadow-black/5 transform group-hover:scale-105 transition-transform duration-500">
+                                  {project.highlight}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-2 group-hover:translate-x-0">
+                              <ArrowUpRight className="text-black/40 group-hover:text-black" size={18} />
                             </div>
                           </div>
 
-                          <div className="text-black/10 group-hover:text-black transition-colors text-lg group-hover:translate-x-1 duration-300">
-                            →
+                          {/* Content */}
+                          <div className="flex-1 p-6 md:p-8 flex flex-col">
+                            <div className="flex-1 space-y-3">
+                              <h3 className="text-2xl font-black tracking-tighter text-black leading-none">
+                                {project.title}
+                              </h3>
+                              <p className="text-black/50 text-sm leading-relaxed font-medium line-clamp-2">
+                                {project.description}
+                              </p>
+
+                              {/* Surfacing a key metric if available */}
+                              {project.metrics && project.metrics.length > 0 && (
+                                <div className="pt-2 flex gap-6">
+                                  {project.metrics.slice(0, 2).map((m, i) => (
+                                    <div key={i} className="flex flex-col">
+                                      <span className="text-[8px] font-mono font-bold text-black/30 uppercase tracking-[0.2em] mb-0.5">{m.label}</span>
+                                      <span className="text-[11px] font-bold text-black/80">{m.value}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-black/5 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div className="flex -space-x-2.5">
+                                  {project.stack?.slice(0, 5).map((tech, i) => (
+                                    <div 
+                                      key={i} 
+                                      className="w-8 h-8 rounded-full bg-white border border-black/10 flex items-center justify-center p-1.5 shadow-sm relative z-[10] hover:z-[20] hover:-translate-y-1 transition-all"
+                                      title={tech.name || tech.label}
+                                    >
+                                      {tech.icon}
+                                    </div>
+                                  ))}
+                                </div>
+                                {project.stack?.length > 5 && (
+                                  <span className="text-[10px] font-bold text-black/20 ml-1">
+                                    +{project.stack.length - 5}
+                                  </span>
+                                )}
+                              </div>
+                              
+                              <div className="flex items-center gap-1.5 group/btn text-black/30 hover:text-black transition-colors">
+                                <span className="text-[9px] font-bold tracking-[0.2em] uppercase">
+                                  Proof
+                                </span>
+                                <ArrowUpRight size={12} className="opacity-0 group-hover/btn:opacity-100 transition-all" />
+                              </div>
+                            </div>
                           </div>
                         </motion.div>
                       );
