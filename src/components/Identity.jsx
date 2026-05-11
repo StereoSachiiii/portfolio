@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export const Identity = ({ identity }) => {
   return (
-    <div className="md:sticky md:top-0 md:h-screen flex flex-col justify-center gap-8 py-24 md:py-0">
+    <div className="md:sticky md:top-0 md:h-screen flex flex-col justify-center gap-8 py-12 md:py-0">
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

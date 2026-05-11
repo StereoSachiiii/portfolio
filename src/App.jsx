@@ -4,11 +4,13 @@ import { ArrowUpRight } from 'lucide-react';
 import { data } from './data';
 import { Identity } from './components/Identity';
 import { ProjectDetail } from './components/ProjectDetail';
+import { StackDropdown } from './components/StackDropdown';
 
 export default function App() {
   const [tab, setTab] = useState("projects");
   const [selectedProject, setSelectedProject] = useState(null);
   const [projectView, setProjectView] = useState("overview");
+  const [hoveredTech, setHoveredTech] = useState(null);
 
   return (
     <div className="min-h-screen bg-white text-black selection:bg-black selection:text-white relative overflow-x-clip">
@@ -32,7 +34,7 @@ export default function App() {
         <Identity identity={data.identity} />
 
         {/* Right Side: Content Panel */}
-        <div className="flex flex-col py-24 md:py-32 min-h-screen">
+        <div className="flex flex-col py-12 md:py-16 min-h-screen">
           <AnimatePresence mode="wait">
             {!selectedProject ? (
               <motion.div
@@ -64,57 +66,47 @@ export default function App() {
                 </nav>
 
                 {tab === 'projects' ? (
-                  <div className="grid grid-cols-1 gap-12">
+                  <div className="grid grid-cols-1 gap-3">
                     {data.projects.map((project, index) => {
-                      const isFeatured = index === 0;
+                      const categoryStyles = {
+                        SYSTEMS: { border: 'border-black', tag: 'bg-black text-white' },
+                        OS: { border: 'border-gray-500', tag: 'bg-gray-600 text-white' },
+                        WEB: { border: 'border-gray-200', tag: 'bg-gray-200 text-black' },
+                        ML: { border: 'border-gray-200', tag: 'bg-gray-200 text-black' }
+                      };
+                      const style = categoryStyles[project.category] || categoryStyles.WEB;
+
                       return (
                         <motion.div
                           key={project.id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
+                          transition={{ delay: index * 0.05 }}
                           onClick={() => {
                             setSelectedProject(project);
                             setProjectView("overview");
                           }}
-                          className={`group cursor-pointer border border-black/5 rounded-3xl transition-all duration-500 overflow-hidden ${
-                            isFeatured 
-                            ? 'bg-white p-12 hover:border-black shadow-[0_4px_30px_rgba(0,0,0,0.02)]' 
-                            : 'p-8 hover:bg-black/[0.02] hover:border-black/20'
-                          }`}
+                          className={`group cursor-pointer border-l-[3px] ${style.border} border-y border-r border-black/5 rounded-lg p-5 bg-white hover:bg-black/[0.01] transition-all duration-300 flex justify-between items-center gap-4`}
                         >
-                          <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-                            <div className="flex-1 space-y-6">
-                              <div className="flex items-center gap-4">
-                                <span className="text-[10px] font-mono font-bold tracking-[0.2em] bg-black text-white px-3 py-1 rounded-full uppercase">
-                                  {project.category}
-                                </span>
-                                <span className="text-[11px] font-mono text-black/30">{project.date}</span>
-                              </div>
-                              
-                              <div>
-                                <h3 className={`font-semibold tracking-tighter text-black mb-4 group-hover:text-black transition-colors ${
-                                  isFeatured ? 'text-4xl' : 'text-2xl'
-                                }`}>
-                                  {project.title}
-                                </h3>
-                                <p className={`text-black opacity-60 leading-relaxed max-w-2xl ${
-                                  isFeatured ? 'text-lg' : 'text-sm'
-                                }`}>
-                                  {project.tags}
-                                </p>
-                              </div>
+                          <div className="flex-1 space-y-1 w-full">
+                            <div className="flex items-center gap-3">
+                              <span className={`text-[8px] font-mono font-bold tracking-[0.2em] px-1.5 py-0.5 rounded-sm uppercase ${style.tag}`}>
+                                {project.category}
+                              </span>
                             </div>
+                            
+                            <div className="flex items-baseline gap-4">
+                              <h3 className="text-xl font-bold tracking-tighter text-black group-hover:text-black transition-colors leading-tight">
+                                {project.title}
+                              </h3>
+                              <p className="text-black/40 text-[12px] leading-relaxed max-w-xl font-medium line-clamp-1">
+                                {project.tags}
+                              </p>
+                            </div>
+                          </div>
 
-                            <div className="flex flex-col items-end justify-center min-w-[140px]">
-                              <div className="flex -space-x-2">
-                                {project.stack?.slice(0, 3).map((s, i) => (
-                                  <div key={i} className="w-8 h-8 rounded-full bg-white border border-black/5 flex items-center justify-center p-1.5 shadow-sm">
-                                    {s.icon}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
+                          <div className="text-black/10 group-hover:text-black transition-colors text-lg group-hover:translate-x-1 duration-300">
+                            →
                           </div>
                         </motion.div>
                       );
@@ -127,22 +119,48 @@ export default function App() {
                         <h4 className="text-[11px] font-mono font-bold tracking-[0.4em] text-black/30 uppercase border-b border-black/5 pb-4">
                           {cat.category}
                         </h4>
-                        <div className="flex flex-wrap gap-x-12 gap-y-8">
+                        <div className="flex flex-wrap gap-x-16 gap-y-12">
                           {cat.items.map((item, j) => (
-                            <div key={j} className="group relative">
+                            <div 
+                              key={j} 
+                              className="group relative"
+                              onMouseEnter={() => setHoveredTech(item.name)}
+                              onMouseLeave={() => setHoveredTech(null)}
+                            >
                               {/* Technical Keyword */}
-                              <div className="flex items-center gap-6 cursor-default group/keyword">
+                              <div className="flex items-center gap-4 cursor-default group/keyword">
                                 <div className="transition-transform duration-300 group-hover/keyword:scale-110">
                                   {item.icon}
                                 </div>
                                 <div className="flex flex-col">
-                                  <div className="flex items-baseline gap-2">
+                                  <div className="flex items-baseline gap-3">
                                     <span className="text-xl font-bold text-black border-b border-black/5 group-hover:border-black transition-all tracking-tight">
                                       {item.name}
                                     </span>
+                                    {item.projects?.length > 0 && (
+                                      <span className="text-[10px] font-mono font-bold text-black/20 group-hover:text-black/40 transition-colors">
+                                        · {item.projects.length} {item.projects.length === 1 ? 'project' : 'projects'}
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                               </div>
+
+                              <AnimatePresence>
+                                {hoveredTech === item.name && (
+                                  <StackDropdown 
+                                    item={item} 
+                                    onProjectClick={(projData) => {
+                                      const fullProject = data.projects.find(p => p.id === projData.id);
+                                      if (fullProject) {
+                                        setSelectedProject(fullProject);
+                                        setProjectView("technical");
+                                        // The ProjectDetail component will handle the scroll to technical proof
+                                      }
+                                    }}
+                                  />
+                                )}
+                              </AnimatePresence>
                             </div>
                           ))}
                         </div>

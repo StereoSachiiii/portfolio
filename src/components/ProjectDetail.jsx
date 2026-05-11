@@ -1,14 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export const ProjectDetail = ({ project, view, setView, onBack }) => {
   const toolsRef = useRef(null);
 
+  useEffect(() => {
+    if (view === 'technical') {
+      setTimeout(() => {
+        toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }, [view]);
+
   const handleStackClick = () => {
     setView('technical');
-    setTimeout(() => {
-      toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
   };
 
   return (
@@ -143,24 +148,30 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
 
               {/* 7. Tech Stack Sidebar */}
               <div className="space-y-10">
-                <h4 className="text-[10px] font-mono uppercase tracking-[0.4em] text-black/40 text-right">Tech Stack</h4>
-                <div className="flex flex-col gap-6 items-end sticky top-32">
+                <div className="flex flex-col gap-3 items-end sticky top-32">
+                  <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-4">Tech Stack</span>
                   {project.stack?.map(item => (
                     <button 
                       key={item.name}
                       onClick={handleStackClick}
-                      className="group relative flex items-center gap-4 w-fit"
+                      className="group flex items-center gap-4 w-fit px-5 py-2.5 bg-white border border-black/5 hover:border-black hover:bg-black transition-all duration-300 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
                     >
-                      <div className="absolute right-full mr-4 px-3 py-1.5 bg-black text-white text-[9px] font-mono uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl">
-                        See how I used this ↗
-                      </div>
-                      <div className="p-3 bg-black/[0.03] rounded-xl group-hover:bg-black group-hover:invert transition-all duration-300">
-                        {item.icon}
+                      <span className="text-[12px] font-mono font-bold text-black group-hover:text-white transition-colors uppercase tracking-widest">
+                        {item.name}
+                      </span>
+                      <div className="relative">
+                        <div className="absolute right-full mr-4 top-1 px-3 py-1 bg-black text-white text-[9px] font-mono uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl">
+                          Implementation proof ↗
+                        </div>
+                        <div className="transition-transform duration-300 group-hover:scale-110">
+                          {React.cloneElement(item.icon, { size: 18 })}
+                        </div>
                       </div>
                     </button>
                   ))}
-                  <p className="text-[9px] font-mono text-black/30 text-right mt-4 leading-relaxed">
-                    Click to see what I<br />actually used these for →
+                  
+                  <p className="text-[10px] font-mono text-black/40 text-right mt-6 leading-relaxed max-w-[140px]">
+                    Click to jump to technical sections
                   </p>
                 </div>
               </div>
@@ -222,7 +233,11 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                       <div key={tool.name} className="group">
                         <div className="flex items-center gap-4 mb-5">
                           <div className="flex items-center gap-3">
-                            {tool.icon && <div className="p-2.5 bg-black/[0.03] rounded-xl group-hover:bg-black transition-all duration-300 group-hover:invert scale-110">{tool.icon}</div>}
+                            {tool.icon && (
+                              <div className="p-2.5 bg-black/[0.03] rounded-xl group-hover:bg-black/5 transition-all duration-300 scale-110">
+                                {React.cloneElement(tool.icon, { size: 20 })}
+                              </div>
+                            )}
                             <span className="text-[15px] font-bold font-mono text-black uppercase tracking-wider">{tool.name}</span>
                           </div>
                           <span className="text-[9px] text-black/30 uppercase tracking-[0.2em] font-mono">{tool.desc}</span>
@@ -239,9 +254,17 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 </div>
               )}
 
-              {/* Technical Deep Dives */}
-              <div className="pt-20 border-t border-black/10 space-y-24">
-                <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">Design Documentation</h4>
+              {/* Why / Context in Technical View */}
+              <div className="pt-20 border-t border-black/10">
+                <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">Architectural Context</h4>
+                <p className="text-[18px] text-black leading-relaxed font-normal opacity-90 max-w-4xl">
+                  {project.whyParagraph}
+                </p>
+              </div>
+
+              {/* Technical Deep Dives (Code) */}
+              <div className="space-y-24">
+                <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">System Implementation</h4>
                 {project.technicalSections?.map((section, i) => (
                   <div key={i} className="group">
                     <h5 className="text-[12px] font-bold text-black mb-10 uppercase tracking-[0.3em] font-mono">{section.title}</h5>
@@ -256,16 +279,33 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                           <pre className="relative text-[11px] font-mono p-7 bg-black text-white rounded-xl overflow-x-auto shadow-2xl leading-relaxed border border-white/10">
                             <code className="language-cpp">{section.code}</code>
                           </pre>
-                          <div className="mt-4 flex items-center gap-2">
-                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                             <span className="text-[9px] font-mono text-black/40 uppercase tracking-widest">Hot Path Optimization</span>
-                          </div>
+                            <div className="mt-4 flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                              <span className="text-[9px] font-mono text-black/40 uppercase tracking-widest">
+                                {section.label || "System Logic"}
+                              </span>
+                            </div>
                         </div>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Technical Learnings */}
+              {project.learnings && (
+                <div className="pt-20 border-t border-black/10 space-y-12">
+                  <h4 className="text-[15px] font-mono font-bold tracking-widest text-black">Things that broke my mental model</h4>
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {project.learnings.map((l, i) => (
+                      <div key={i} className="p-8 border border-black/10 rounded-2xl bg-white hover:border-black transition-all shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                        <h5 className="text-[13px] font-bold text-black mb-4 uppercase tracking-widest">{l.title}</h5>
+                        <p className="text-[15px] text-black/70 leading-relaxed">{l.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
