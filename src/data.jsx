@@ -5,13 +5,16 @@ import { TechIcon } from './components/TechIcon';
 export const data = {
   identity: {
     name: "Sachin",
-    oneLine: "Systems engineer building things close to the metal.",
+    oneLine: "Backend engineer who also can build close to the metal.",
     philosophy: "I build high-performance infrastructure and trading systems. Focused on memory safety, nanosecond latency, and making software that respects the hardware.",
     photo: "https://api.dicebear.com/7.x/initials/svg?seed=SL&backgroundColor=000000&fontFamily=Inter",
     stack: [
       { label: "C++", icon: <TechIcon name="cplusplus" /> },
       { label: "Go", icon: <TechIcon name="go" /> },
-      { label: "Python", icon: <TechIcon name="python" /> }
+      { label: "Python", icon: <TechIcon name="python" /> },
+      { label: "JS", icon: <TechIcon name="javascript" /> },
+      { label: "TS", icon: <TechIcon name="typescript" /> },
+      { label: "React", icon: <TechIcon name="react" /> }
     ],
     links: [
       { id: "github", icon: <Github size={18} />, url: "https://github.com/StereoSachiiii" },
@@ -694,17 +697,6 @@ export const data = {
       ]
     },
     {
-      category: "SYSTEMS",
-      items: [
-        { name: "Concurrency Control", icon: <Activity size={24} />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Atomic row-level locking" }, { id: "backtesting", title: "Backtesting Engine", context: "Lock-free ring buffers" }] },
-        { name: "Real-time Sync", icon: <Activity size={24} />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "STOMP WebSocket broadcasts" }] },
-        { name: "Interception Proxy", icon: <Terminal size={24} />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "stdio TeeReader proxying" }] },
-        { name: "Vector Search", icon: <Binary size={24} />, projects: [{ id: "rag-pipeline", title: "RAG Pipeline", context: "HNSW graph indexing" }] },
-        { name: "Memory allocators", icon: <Binary size={24} />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "OS-backed page pools" }] },
-        { name: "Cache alignment", icon: <Gauge size={24} />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "alignas(64) hot paths" }] }
-      ]
-    },
-    {
       category: "DATABASES",
       items: [
         { name: "PostgreSQL", icon: <TechIcon name="postgresql" />, projects: [{ id: "royal-liquor", title: "Royal Liquor Store", context: "Complex views & triggers" }, { id: "reservation", title: "Book Fair Reservation", context: "FOR UPDATE locking" }, { id: "rag-pipeline", title: "RAG Pipeline", context: "pgvector semantic search" }] },
@@ -713,7 +705,7 @@ export const data = {
       ]
     },
     {
-      category: "INFRASTRUCTURE",
+      category: "INFRASTRUCTURE / DEVOPS",
       items: [
         { name: "Docker", icon: <TechIcon name="docker" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "Containerized deployment" }, { id: "rag-pipeline", title: "RAG Pipeline", context: "Multi-service composition" }, { id: "royal-liquor", title: "Royal Liquor Store", context: "Dev-prod parity" }] },
         { name: "AWS", icon: <TechIcon name="amazonwebservices" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "EC2 & Nginx deployment" }] },
@@ -724,6 +716,7 @@ export const data = {
     {
       category: "TOOLS & FRAMEWORKS",
       items: [
+        { name: "React", icon: <TechIcon name="react" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Client-side floor map & state" }] },
         { name: "Next.js 15", icon: <TechIcon name="nextdotjs" />, projects: [{ id: "storeit", title: "StoreIt", context: "Server Actions & Auth" }] },
         { name: "Spring Boot", icon: <TechIcon name="spring" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Security filter chains" }] },
         { name: "FastAPI", icon: <TechIcon name="fastapi" />, projects: [{ id: "rag-pipeline", title: "RAG Pipeline", context: "Async API orchestration" }] },
