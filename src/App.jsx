@@ -201,7 +201,7 @@ export default function App() {
       <main className="relative z-10 w-full main-container grid md:grid-cols-[280px_1fr] gap-12 md:gap-32">
         <Identity identity={data.identity} />
 
-        <div className="flex flex-col py-12 md:py-16 min-h-screen">
+        <div className="flex flex-col py-12 md:py-16 min-h-screen min-w-0 w-full overflow-hidden">
           <AnimatePresence mode="wait">
             {!selectedProject ? (
               <motion.div

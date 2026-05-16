@@ -135,7 +135,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
           {view === 'overview' ? (
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-12 lg:gap-20">
               {/* Main Content Flow */}
-              <div className="space-y-24">
+              <div className="space-y-24 min-w-0">
 
                 {/* 0. What is this — plain English for non-technical readers */}
                 {project.whatIsThis && (
@@ -241,7 +241,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 </div>
 
                 {/* 3. Build Story */}
-                <div className="max-w-3xl py-8 px-10 border-l-2 border-black/5 bg-black/[0.01]">
+                <div className="max-w-3xl py-8 px-6 md:px-10 border-l-2 border-black/5 bg-black/[0.01]">
                   <p className="text-[14px] text-black/60 leading-relaxed italic">
                     {project.buildStory}
                   </p>
@@ -320,7 +320,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
               </div>
             </div>
           ) : (
-            <div className="space-y-24">
+            <div className="space-y-24 min-w-0">
               {/* Detailed architecture diagram — controlled by project.showArchDiagram */}
               {project.showArchDiagram && (
                 <div className="space-y-4">
@@ -350,7 +350,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 {project.benchmarks && (
                   <div>
                     <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">Performance Proof</h4>
-                    <div className="border border-black/10 rounded-xl overflow-hidden bg-black/[0.02]">
+                    <div className="border border-black/10 rounded-xl overflow-x-auto bg-black/[0.02]">
                       <table className="w-full text-left border-collapse">
                         <thead>
                           <tr className="border-b border-black/10 bg-black/5">
@@ -441,7 +441,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                         </p>
                       </div>
                       {section.code && (
-                        <div className="relative group/code">
+                        <div className="relative group/code min-w-0">
                           <pre className="relative text-[11px] font-mono p-7 bg-black text-white rounded-xl overflow-x-auto shadow-2xl leading-relaxed border border-white/10">
                             <code className="language-cpp">{section.code}</code>
                           </pre>
