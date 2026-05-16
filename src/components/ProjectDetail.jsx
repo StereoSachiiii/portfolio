@@ -28,26 +28,26 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       className="w-full relative"
     >
       {/* Sticky Action Bar */}
-      <div className="sticky top-0 z-50 flex justify-between items-center py-4 md:py-6 mb-8 md:mb-12 bg-white/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8">
+      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-white/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8">
         <button 
           onClick={onBack}
-          className="text-[10px] font-mono uppercase tracking-[0.4em] text-black border border-black/10 px-6 py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-2 group"
+          className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.4em] text-black border border-black/10 px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-1.5 md:gap-2 group"
         >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Projects
+          <span className="group-hover:-translate-x-1 transition-transform">←</span> <span className="hidden xs:inline">Back to</span> Projects
         </button>
 
         <a 
           href={project.github || "#"} 
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[10px] font-mono uppercase tracking-[0.4em] bg-black text-white px-6 py-2.5 rounded-full hover:bg-black/80 transition-all flex items-center gap-2"
+          className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.4em] bg-black text-white px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:bg-black/80 transition-all flex items-center gap-1.5 md:gap-2"
         >
-          View on GitHub <span className="opacity-50">↗</span>
+          GitHub <span className="opacity-50">↗</span>
         </a>
       </div>
       
       <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
-        <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-black">{project.title}</h2>
+        <h2 className="text-3xl md:text-6xl font-semibold tracking-tighter text-black leading-tight">{project.title}</h2>
 
         {/* Card deck — click to jump to screenshots */}
         {project.screenshots && (

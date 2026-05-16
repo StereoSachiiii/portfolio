@@ -24,6 +24,7 @@ html.lenis, html.lenis body {
   --color-background: #ffffff;
   --color-foreground: #000000;
   --font-inter: "Inter", sans-serif;
+  --breakpoint-xs: 480px;
 }
 
 :root {
@@ -79,43 +80,71 @@ body {
 /* 1. Mobile & Small Screen Optimizations (< 640px) */
 @media (max-width: 639px) {
   h1 {
-    font-size: clamp(2.5rem, 12vw, 3.5rem) !important;
+    font-size: clamp(2rem, 10vw, 2.5rem) !important;
+    letter-spacing: -0.05em !important;
   }
   
   h2 {
-    font-size: clamp(2rem, 10vw, 3rem) !important;
+    font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
+    letter-spacing: -0.04em !important;
   }
 
   .main-container {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
   }
 
   /* Reduce gap in grid layouts */
   .grid {
-    gap: 1.5rem !important;
+    gap: 1.25rem !important;
   }
 
   /* Scale down tiny mono text slightly less on mobile for legibility */
   .font-mono {
-    font-size: max(10px, 0.8em);
+    font-size: 9px !important;
   }
+
+  /* Force wrap on long words to prevent overflow */
+  p, h1, h2, h3, span {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}
+
+/* Base class for main-container */
+.main-container {
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-sizing: border-box;
 }
 
 /* 2. Tablet Refinements (640px - 1024px) */
 @media (min-width: 640px) and (max-width: 1023px) {
   .main-container {
-    padding-left: 2.5rem !important;
-    padding-right: 2.5rem !important;
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
   }
 }
 
-/* 3. Ultra-wide Screen Support (> 1536px) */
+/* 3. Desktop Refinements (1024px+) */
+@media (min-width: 1024px) {
+  .main-container {
+    padding-left: 8rem;
+    padding-right: 8rem;
+  }
+}
+
+/* 4. Ultra-wide Screen Support (> 1536px) */
 @media (min-width: 1536px) {
   .main-container {
-    max-width: 1600px;
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 

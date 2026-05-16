@@ -211,7 +211,7 @@ export default function App() {
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <nav className="flex gap-6 md:gap-14 mb-12 md:mb-16 border-b border-black/5 overflow-x-auto no-scrollbar scroll-mt-20">
+                <nav className="flex gap-4 md:gap-14 mb-10 md:mb-16 border-b border-black/5 overflow-x-auto no-scrollbar scroll-mt-20 px-2 md:px-0">
                   {['projects', 'stack', 'writing', 'contact'].map((t, i) => (
                     <button
                       key={t}
@@ -220,10 +220,10 @@ export default function App() {
                         tab === t ? 'text-black' : 'text-black/40 hover:text-black/80'
                       }`}
                     >
-                      <span className="text-[10px] font-mono font-bold opacity-60 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[9px] md:text-[10px] font-mono font-bold opacity-60 group-hover:opacity-100 transition-opacity">
                         0{i + 1}
                       </span>
-                      <span className="text-2xl font-black tracking-tighter uppercase">{t}</span>
+                      <span className="text-lg md:text-2xl font-black tracking-tighter uppercase whitespace-nowrap">{t}</span>
                       {tab === t && (
                         <motion.div
                           layoutId="mainTabUnderline"
