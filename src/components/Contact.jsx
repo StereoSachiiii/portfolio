@@ -27,7 +27,7 @@ export const Contact = ({ links }) => {
           className="space-y-12"
         >
           <div className="space-y-4">
-            <h2 className="text-4xl font-black tracking-tighter text-black uppercase">
+            <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-black uppercase leading-none">
               {contactConfig.heading}
             </h2>
             <p className="text-black/80 font-medium leading-relaxed max-w-md">
@@ -119,7 +119,7 @@ export const Contact = ({ links }) => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-12"
         >
-          <div className="space-y-8 p-8 rounded-2xl bg-black/5 border border-black/10">
+          <div className="space-y-8 p-6 md:p-8 rounded-2xl bg-black/5 border border-black/10">
             <div className="space-y-2">
               <h4 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-black/50">
                 {contactConfig.emailHeading}

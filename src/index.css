@@ -73,3 +73,86 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+/* --- Thorough Media Queries --- */
+
+/* 1. Mobile & Small Screen Optimizations (< 640px) */
+@media (max-width: 639px) {
+  h1 {
+    font-size: clamp(2.5rem, 12vw, 3.5rem) !important;
+  }
+  
+  h2 {
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+  }
+
+  .main-container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Reduce gap in grid layouts */
+  .grid {
+    gap: 1.5rem !important;
+  }
+
+  /* Scale down tiny mono text slightly less on mobile for legibility */
+  .font-mono {
+    font-size: max(10px, 0.8em);
+  }
+}
+
+/* 2. Tablet Refinements (640px - 1024px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .main-container {
+    padding-left: 2.5rem !important;
+    padding-right: 2.5rem !important;
+  }
+}
+
+/* 3. Ultra-wide Screen Support (> 1536px) */
+@media (min-width: 1536px) {
+  .main-container {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 4. Touch Device Optimizations */
+@media (hover: none) {
+  /* Disable hover effects that feel "sticky" on touch */
+  .group:hover, 
+  .hover\:shadow-xl:hover,
+  .hover\:scale-110:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* Ensure tap targets are large enough */
+  button, a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* 5. Custom Height Queries for Small/Short Screens */
+@media (max-height: 700px) {
+  .md\:h-screen {
+    height: auto !important;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* 6. Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+}

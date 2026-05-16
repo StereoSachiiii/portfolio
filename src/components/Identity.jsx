@@ -69,7 +69,7 @@ export const Identity = ({ identity }) => {
           }}
         >
           <div className="space-y-1">
-            <h1 className="text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
               {identity.name}
             </h1>
             <motion.p

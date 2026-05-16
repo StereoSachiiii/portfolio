@@ -17,7 +17,7 @@ const StackSection = memo(({ onProjectClick }) => {
           <h4 className="text-[11px] font-mono font-bold tracking-[0.4em] text-black/50 uppercase border-b border-black/10 pb-4">
             {cat.category}
           </h4>
-          <div className="flex flex-wrap gap-x-16 gap-y-12">
+          <div className="flex flex-wrap gap-x-8 md:gap-x-16 gap-y-12">
             {cat.items.map((item, j) => (
               <div
                 key={j}
@@ -121,7 +121,7 @@ const ProjectCard = memo(({ project, onClick }) => {
 
       <div className="flex-1 p-6 md:p-8 flex flex-col">
         <div className="flex-1 space-y-3">
-          <h3 className="text-2xl font-black tracking-tighter text-black leading-none">{project.title}</h3>
+          <h3 className="text-xl md:text-2xl font-black tracking-tighter text-black leading-none">{project.title}</h3>
           <p className="text-black/80 text-sm leading-relaxed font-medium line-clamp-2">{project.description}</p>
           {project.metrics && project.metrics.length > 0 && (
             <div className="pt-2 flex gap-6">
@@ -198,7 +198,7 @@ export default function App() {
         <div className="absolute inset-0 bg-white/60"></div>
       </motion.div>
 
-      <main className="relative z-10 w-full px-8 md:px-16 lg:px-32 grid md:grid-cols-[280px_1fr] gap-12 md:gap-32">
+      <main className="relative z-10 w-full main-container grid md:grid-cols-[280px_1fr] gap-12 md:gap-32">
         <Identity identity={data.identity} />
 
         <div className="flex flex-col py-12 md:py-16 min-h-screen">
@@ -211,7 +211,7 @@ export default function App() {
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <nav className="flex gap-10 md:gap-14 mb-16 border-b border-black/5 overflow-x-auto no-scrollbar">
+                <nav className="flex gap-6 md:gap-14 mb-12 md:mb-16 border-b border-black/5 overflow-x-auto no-scrollbar scroll-mt-20">
                   {['projects', 'stack', 'writing', 'contact'].map((t, i) => (
                     <button
                       key={t}

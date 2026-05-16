@@ -28,7 +28,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       className="w-full relative"
     >
       {/* Sticky Action Bar */}
-      <div className="sticky top-0 z-50 flex justify-between items-center py-6 mb-12 bg-white/90 backdrop-blur-md border-b border-black/5 -mx-4 px-4">
+      <div className="sticky top-0 z-50 flex justify-between items-center py-4 md:py-6 mb-8 md:mb-12 bg-white/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8">
         <button 
           onClick={onBack}
           className="text-[10px] font-mono uppercase tracking-[0.4em] text-black border border-black/10 px-6 py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-2 group"
@@ -46,8 +46,8 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
         </a>
       </div>
       
-      <div className="flex items-start justify-between gap-6 mb-6">
-        <h2 className="text-6xl font-semibold tracking-tighter text-black">{project.title}</h2>
+      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
+        <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-black">{project.title}</h2>
 
         {/* Card deck — click to jump to screenshots */}
         {project.screenshots && (
@@ -108,12 +108,12 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
 
       {/* View Toggle */}
       {(project.overview || project.technicalSections) && (
-        <div className="flex gap-12 mb-16 border-b border-black/5 relative">
+        <div className="flex gap-6 md:gap-12 mb-12 md:mb-16 border-b border-black/5 relative overflow-x-auto no-scrollbar">
           {['overview', 'technical'].map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
-              className={`pb-4 text-[11px] font-mono uppercase tracking-[0.4em] transition-all relative ${
+              className={`pb-4 text-[10px] md:text-[11px] font-mono uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all relative whitespace-nowrap ${
                 view === v ? 'text-black font-bold' : 'text-black/20 hover:text-black/40'
               }`}
             >
@@ -133,7 +133,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       <div className="space-y-12">
         <div className="max-w-5xl">
           {view === 'overview' ? (
-            <div className="grid md:grid-cols-[1fr_180px] gap-20">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-12 lg:gap-20">
               {/* Main Content Flow */}
               <div className="space-y-24">
 
@@ -290,8 +290,8 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
               </div>
 
               {/* 7. Tech Stack Sidebar */}
-              <div className="space-y-10">
-                <div className="flex flex-col gap-3 items-end sticky top-32">
+              <div className="space-y-10 lg:block">
+                <div className="flex flex-wrap lg:flex-col gap-3 lg:items-end sticky top-32">
                   <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-4">Tech Stack</span>
                   {project.stack?.map(item => (
                     <button 

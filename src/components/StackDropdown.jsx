@@ -10,7 +10,7 @@ export const StackDropdown = ({ item, onProjectClick }) => {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.95 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute top-full left-0 mt-4 z-50 min-w-[280px] bg-white border border-black/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-6 origin-top-left"
+      className="absolute top-full left-0 md:left-0 mt-4 z-50 min-w-[240px] md:min-w-[280px] w-[calc(100vw-4rem)] md:w-auto max-w-[320px] bg-white border border-black/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-5 md:p-6 origin-top-left"
     >
       <div className="mb-4">
         <p className="text-[10px] font-mono font-bold tracking-[0.2em] text-black/30 uppercase italic">Used in</p>
