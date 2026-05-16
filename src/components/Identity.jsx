@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ScrambleText } from './ScrambleText';
-import { SlotMachineText } from './SlotMachineText';
+
+// Blinking cursor — programmer's signature
+const Cursor = () => (
+  <motion.span
+    animate={{ opacity: [1, 0, 1] }}
+    transition={{ duration: 1, repeat: Infinity, ease: "steps(1)" }}
+    className="inline-block w-[2px] h-[1em] bg-black align-middle ml-1"
+  />
+);
 
 export const Identity = ({ identity }) => {
   return (
@@ -13,7 +20,7 @@ export const Identity = ({ identity }) => {
         className="space-y-12"
       >
         {/* Avatar Section */}
-        <div className="relative group w-fit">
+        <div className="relative group w-fit mx-auto md:mx-0">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -21,17 +28,20 @@ export const Identity = ({ identity }) => {
             className="relative"
           >
             <div className="absolute -inset-1 bg-gradient-to-tr from-black/20 to-transparent rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <button 
+            <motion.button 
               onClick={() => window.location.reload()}
-              className="relative w-20 h-20 rounded-full border border-black/5 overflow-hidden bg-white flex items-center justify-center transition-all duration-500 group-hover:border-black/20 group-hover:shadow-2xl group-hover:shadow-black/5"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="relative w-20 h-20 rounded-full border border-black/5 overflow-hidden bg-white flex items-center justify-center shadow-sm"
             >
               <img 
                 src={identity.photo} 
                 alt="Avatar" 
-                className="w-14 h-14 opacity-90 transition-transform duration-700 group-hover:scale-110" 
+                className="w-full h-full object-cover object-top opacity-95 transition-transform duration-700 group-hover:scale-110" 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </button>
+            </motion.button>
           </motion.div>
           
           {/* Status Indicator */}
@@ -48,25 +58,39 @@ export const Identity = ({ identity }) => {
           </motion.div>
         </div>
 
-        {/* Heading Section */}
-        <div className="space-y-4">
+        {/* Heading Section — staggered reveal */}
+        <motion.div
+          className="space-y-4"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } }
+          }}
+        >
           <div className="space-y-1">
             <h1 className="text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
-              <SlotMachineText text={identity.name} delay={0.5} />
+              {identity.name}
             </h1>
-            <p className="text-black text-lg font-bold tracking-tight leading-tight max-w-[280px]">
-              {identity.oneLine}
-            </p>
+            <motion.p
+              variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
+              className="text-black text-lg font-bold tracking-tight leading-tight max-w-[280px]"
+            >
+              {identity.oneLine}<Cursor />
+            </motion.p>
           </div>
-          <p className="text-black text-[13px] leading-relaxed max-w-[300px] font-medium">
+          <motion.p
+            variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
+            className="text-black text-[13px] leading-relaxed max-w-[300px] font-medium"
+          >
             {identity.philosophy}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
         {/* Stack Tokens */}
         <div className="space-y-3">
-          <h4 className="text-[9px] font-mono font-bold uppercase tracking-[0.3em] text-black/50">
-            What I build with
+          <h4 className="text-[10px] font-mono font-bold tracking-[0.25em] text-black">
+            what I build with!
           </h4>
           <div className="flex flex-wrap gap-2">
             {identity.stack?.map((tech, i) => (
@@ -74,12 +98,17 @@ export const Identity = ({ identity }) => {
                 key={tech.label}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + (i * 0.1) }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/[0.02] border border-black/[0.1] text-[11px] text-black hover:bg-black/5 hover:border-black/20 transition-all cursor-default font-bold"
+                transition={{ delay: 0.5 + (i * 0.08), duration: 0.35, ease: "easeOut" }}
+                whileHover={{ y: -3, boxShadow: "0 8px 24px -4px rgba(0,0,0,0.12)", transition: { type: "spring", stiffness: 500, damping: 20 } }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white border border-black/[0.1] text-[13px] text-black hover:border-black/25 transition-colors cursor-default font-bold shadow-sm"
               >
-                <div className="w-4 h-4 grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+                <motion.div
+                  className="w-5 h-5 flex items-center justify-center"
+                  whileHover={{ scale: 1.2, rotate: -5, transition: { type: "spring", stiffness: 400, damping: 15 } }}
+                >
                   {tech.icon}
-                </div>
+                </motion.div>
                 {tech.label}
               </motion.div>
             ))}
@@ -87,24 +116,27 @@ export const Identity = ({ identity }) => {
         </div>
 
         {/* Social Links */}
-        <div className="space-y-4 pt-4">
-          <div className="flex gap-4">
-            {identity.links?.map((link, i) => (
-              <motion.a 
-                key={link.id} 
-                href={link.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6 + (i * 0.1) }}
-                className="w-10 h-10 flex items-center justify-center rounded-xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all active:scale-90"
-              >
-                {link.icon}
-              </motion.a>
-            ))}
-          </div>
-          
+        <div className="flex gap-4 pt-4">
+          {identity.links?.map((link, i) => (
+            <motion.a 
+              key={link.id} 
+              href={link.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 + (i * 0.1) }}
+              whileHover={{ 
+                scale: 1.1, 
+                rotate: i % 2 === 0 ? -4 : 4,
+                transition: { type: "spring", stiffness: 400, damping: 20 }
+              }}
+              whileTap={{ scale: 0.9 }}
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-colors"
+            >
+              {link.icon}
+            </motion.a>
+          ))}
         </div>
       </motion.div>
     </div>
