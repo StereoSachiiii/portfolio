@@ -27,6 +27,7 @@ export const data = {
       id: "backtesting",
       category: "SYSTEMS",
       title: "Backtesting Engine",
+      github: "https://github.com/StereoSachiiii/backtesting_engine",
       highlight: "processes 48M market events/sec",
       tags: "A from-scratch C++ trading simulator — parses real NASDAQ data, rebuilds order books, and runs strategies against it.",
       description: "This one started as curiosity about how trading systems actually work under the hood. It reads real NASDAQ market data, reconstructs the full order book in real time, detects signals, and simulates a market-making strategy. I wrote it in C++ because I wanted to learn what it takes to make something genuinely fast — not just 'fast enough.'",
@@ -205,6 +206,7 @@ export const data = {
       category: "OS",
       highlight: "built from the first instruction the CPU executes",
       title: "LuckyOS",
+      github: "https://github.com/StereoSachiiii/os-dev-project",
       tags: "x86 Assembly · BIOS · Kernel basics",
       description: "A tiny operating system kernel I wrote from scratch. Bootloader, VGA text mode, the whole thing. Only time I wrote assembly and honestly it was pretty wild.",
       stack: [
@@ -231,6 +233,7 @@ export const data = {
       category: "WEB",
       highlight: "built the framework, then the app",
       title: "Royal Beverages",
+      github: "https://github.com/StereoSachiiii/Royal-Beverages",
       tags: "PHP 8.2 · Vanilla JS · PostgreSQL · Custom MVC — no Laravel, no React, no jQuery.",
       whatIsThis: "A full online store — browse products, add to cart, checkout, track orders. There's a customer-facing storefront and a separate admin dashboard for managing inventory, orders, and customers. Every part of it, from the login system to the stock reservation logic, was written from scratch.",
       showArchDiagram: true,
@@ -289,6 +292,18 @@ export const data = {
         { label: "Order management", placeholder: true },
       ],
       description: "I built an entire e-commerce platform without touching a single framework. No Laravel, no React, no jQuery — just PHP 8.2, ES6 modules, and PostgreSQL. Every pattern in here (MVC, DI container, middleware, routing, stock reservation) is hand-rolled. I wanted to understand how web systems actually work before using libraries that do it for me.",
+      technicalSections: [
+        {
+          title: "Custom MVC Framework",
+          label: "Architecture",
+          desc: "Built a modern PHP architecture from scratch featuring a Reflection-Based Dependency Injection container for automatic dependency resolution. It includes a dynamic regex router for fast routing with parameter extraction, strict method validation, and middleware support."
+        },
+        {
+          title: "Multi-Warehouse Inventory System",
+          label: "Domain Logic",
+          desc: "Implemented real-time stock reservation, low-stock alerts, and warehouse allocation algorithms completely from scratch. Integrates with Stripe & PayPal for production-ready payment pipelines."
+        }
+      ],
       stack: [
         { name: "PHP 8.2", icon: <TechIcon name="php" /> },
         { name: "JavaScript", icon: <TechIcon name="javascript" /> },
@@ -432,6 +447,7 @@ export const data = {
       category: "WEB",
       highlight: "drag a stall, watch the price recalculate in real time",
       title: "Colombo Book Fair — Stall Reservation",
+      github: "https://github.com/StereoSachiiii/reservation_system",
       tags: "Spring Boot · React · WebSocket · Stripe · AWS",
       description: "A real-time booking platform I built with a team for the Colombo International Book Fair. You can drag stalls around on a live floor map and the price updates instantly based on where you place it. The fun part was making it sync across everyone's screen in under 100ms.",
       stack: [
@@ -502,6 +518,11 @@ export const data = {
           label: "State Synchronization",
           desc: "STOMP over SockJS provides a pub-sub model for instant state updates. Every stall mutation triggers a broadcast to /topic/stalls. To handle corporate proxies that block WebSockets, SockJS transparently falls back to long-polling. We treated WebSocket as a 'delta stream' rather than the source of truth: if a client reconnects after a drop, they fetch the full state via REST and then rejoin the delta stream. This architecture ensures the map stays in sync sub-100ms without the overhead of polling.",
           code: "simpMessagingTemplate\n  .convertAndSend(\"/topic/stalls\", stallUpdateMessage);"
+        },
+        {
+          title: "TanStack Query Integrations",
+          label: "Data Synchronization",
+          desc: "Used for all asynchronous REST data fetching with automatic cache invalidation on successful mutations, ensuring the frontend stays perfectly synchronized with the PostgreSQL database without manual state management."
         }
       ],
       tools: [
@@ -548,6 +569,7 @@ export const data = {
       category: "ML",
       highlight: "self-hosted semantic search with HNSW indexing",
       title: "Modular RAG Pipeline",
+      github: "https://github.com/StereoSachiiii/rag-pipeline",
       tags: "Python · pgvector · FastAPI · Groq · Docker",
       description: "A RAG pipeline I built from scratch to understand what's actually happening behind tools like LangChain and Pinecone. No managed vector databases, no orchestration libraries — just pgvector, an HNSW index, and a local embedding model. I wanted to see how retrieval actually works.",
       stack: [
@@ -627,6 +649,7 @@ export const data = {
       category: "WEB",
       highlight: "server-side file orchestration & storage",
       title: "StoreIt — Cloud Storage",
+      github: "https://github.com/StereoSachiiii/StoreIt",
       tags: "Next.js 15 · Appwrite · TypeScript · Tailwind · Shadcn",
       description: "A cloud storage app like Google Drive — login, upload files, use them anywhere. I built it with Next.js 15 to see how far Server Actions and Appwrite can go as a full backend replacement. It was also an excuse to play with the newest React 19 features.",
       stack: [
@@ -706,6 +729,7 @@ export const data = {
       category: "SYSTEMS",
       highlight: "JSON-RPC interception layer for MCP",
       title: "MCPWatch",
+      github: "https://github.com/StereoSachiiii/MCPWatch",
       tags: "Go · SQLite · JSON-RPC · Systems Proxy",
       description: "Disclaimer: this is still a work in progress! It's a proxy that sits between you and an MCP server, logging everything the agent does. Right now it intercepts stdio pipes, but the goal is to make it work with any transport — I want to be able to watch what autonomous agents are actually doing.",
       stack: [
@@ -777,6 +801,7 @@ export const data = {
       id: "pysqlite",
       category: "EXPERIMENTS",
       title: "PySQLITE",
+      github: "https://github.com/StereoSachiiii/PySQLITE",
       highlight: "failed experiment with descriptors",
       tags: "Python · Metaprogramming · SQL · Descriptors",
       description: "A Python-based framework for working with SQL using metaprogramming and the descriptor protocol. It was meant to be a tiny ORM until it got too complex for its own good. A great lesson in why some things are better left simple.",
@@ -801,6 +826,7 @@ export const data = {
       id: "gpt-tokenizer",
       category: "EXPERIMENTS",
       title: "GPT-2 Style Tokenizer",
+      github: "https://github.com/StereoSachiiii/GPT-2-style-BPE",
       highlight: "cute little BPE implementation",
       tags: "Python · ML · Tokenization · BPE",
       description: "A from-scratch implementation of Byte Pair Encoding (BPE), the same tokenization algorithm used by GPT-2. Built because I wanted to understand how a model actually 'sees' text before the embeddings happen.",
@@ -844,6 +870,26 @@ export const data = {
       metrics: [
         { label: "High Score", value: "1,420", sub: "My personal best before it gets too fast" },
         { label: "Frame Rate", value: "60 FPS", sub: "Smooth enough for a browser game" }
+      ]
+    },
+    {
+      id: "einstein-rings",
+      category: "ML",
+      title: "Einstein Rings Detector",
+      github: "https://github.com/StereoSachiiii/Einstein-rings-",
+      highlight: "detecting gravitational lensing in night sky images",
+      tags: "Python · Machine Learning · Computer Vision",
+      description: "A Python-based machine learning pipeline that finds Einstein rings (gravitational lensing effects) in night sky images. It includes the complete model suite from dataset ingestion to training and inference.",
+      stack: [
+        { name: "Python", icon: <TechIcon name="python" /> }
+      ],
+      whyParagraph: "I wanted to build a computer vision pipeline from scratch that applied to something fascinating like astrophysics. Einstein rings are rare and visually striking, making them a perfect target for a custom detection model.",
+      buildStory: "The project started with setting up a clean dataset loading mechanism before moving on to the actual training loop. The repository contains the core scripts like dataset.py, train.py, and inference.py that make up the full suite.",
+      learnings: [
+        {
+          title: "End-to-End Pipeline Setup",
+          desc: "Handling the full lifecycle of a machine learning project — from data preparation to inference — is often more complex than the model training itself."
+        }
       ]
     }
   ],
