@@ -25,10 +25,10 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -10 }}
       transition={{ duration: 0.4 }}
-      className="w-full relative"
+      className="w-full relative min-w-0"
     >
       {/* Sticky Action Bar */}
-      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-white/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8">
+      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-pink-50/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8 overflow-x-clip">
         <button 
           onClick={onBack}
           className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.4em] text-black border border-black/10 px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-1.5 md:gap-2 group"
@@ -47,7 +47,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       </div>
       
       <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
-        <h2 className="text-3xl md:text-6xl font-semibold tracking-tighter text-black leading-tight">{project.title}</h2>
+        <h2 className="text-3xl md:text-6xl font-semibold tracking-tighter text-black leading-tight break-words">{project.title}</h2>
 
         {/* Card deck — click to jump to screenshots */}
         {project.screenshots && (
@@ -234,45 +234,55 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 )}
 
                 {/* 2. Why / Context */}
-                <div className="max-w-3xl">
-                  <p className="text-[18px] text-black leading-relaxed font-normal opacity-90">
-                    {project.whyParagraph}
-                  </p>
-                </div>
+                {project.whyParagraph && (
+                  <div className="max-w-3xl">
+                    <p className="text-[18px] text-black leading-relaxed font-normal opacity-90">
+                      {project.whyParagraph}
+                    </p>
+                  </div>
+                )}
 
                 {/* 3. Build Story */}
-                <div className="max-w-3xl py-8 px-6 md:px-10 border-l-2 border-black/5 bg-black/[0.01]">
-                  <p className="text-[14px] text-black/60 leading-relaxed italic">
-                    {project.buildStory}
-                  </p>
-                </div>
+                {project.buildStory && (
+                  <div className="max-w-3xl py-8 px-6 md:px-10 border-l-2 border-black/5 bg-black/[0.01]">
+                    <p className="text-[14px] text-black/60 leading-relaxed italic">
+                      {project.buildStory}
+                    </p>
+                  </div>
+                )}
 
 
                 {/* 6. Limitations / Next Steps */}
-                <div className="grid md:grid-cols-2 gap-20 pt-12 border-t border-black/5">
-                  <div className="space-y-8">
-                    <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">Honest Limitations</h4>
-                    <ul className="space-y-4">
-                      {project.limitations?.map((item, i) => (
-                        <li key={i} className="text-[13px] font-mono text-black/60 flex items-start gap-3">
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-black/20 shrink-0"></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                {(project.limitations || project.nextSteps) && (
+                  <div className="grid md:grid-cols-2 gap-20 pt-12 border-t border-black/5">
+                    {project.limitations && (
+                      <div className="space-y-8">
+                        <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">Honest Limitations</h4>
+                        <ul className="space-y-4">
+                          {project.limitations.map((item, i) => (
+                            <li key={i} className="text-[13px] font-mono text-black/60 flex items-start gap-3">
+                              <span className="mt-1.5 w-1 h-1 rounded-full bg-black/20 shrink-0"></span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {project.nextSteps && (
+                      <div className="space-y-8">
+                        <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">What's Next</h4>
+                        <ul className="space-y-4">
+                          {project.nextSteps.map((item, i) => (
+                            <li key={i} className="text-[13px] font-mono text-black flex items-start gap-3">
+                              <span className="mt-1.5 w-1 h-1 rounded-full bg-black shrink-0"></span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                  <div className="space-y-8">
-                    <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">What's Next</h4>
-                    <ul className="space-y-4">
-                      {project.nextSteps?.map((item, i) => (
-                        <li key={i} className="text-[13px] font-mono text-black flex items-start gap-3">
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-black shrink-0"></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                )}
 
                 {/* CTA for technical readers */}
                 <motion.button
@@ -329,20 +339,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 </div>
               )}
 
-              {/* Stuff I got wrong at first */}
-              {project.learnings && (
-                <div className="space-y-12">
-                  <h4 className="text-[15px] font-mono font-bold tracking-widest text-black">Stuff I got wrong at first</h4>
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {project.learnings.map((l, i) => (
-                      <div key={i} className="p-8 border border-black/10 rounded-2xl bg-white hover:border-black transition-all shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
-                        <h5 className="text-[13px] font-bold text-black mb-4">{l.title}</h5>
-                        <p className="text-[15px] text-black/70 leading-relaxed">{l.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+
 
               {/* Performance Proof Section */}
               <div className="grid md:grid-cols-2 gap-20">
@@ -394,69 +391,86 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
               {project.tools && (
                 <div className="pt-20 border-t border-black/10">
                   <h4 ref={toolsRef} className="text-[15px] font-mono font-bold tracking-widest text-black mb-12">What I used & for what</h4>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-16">
-                    {project.tools.map((tool) => (
-                      <div key={tool.name} className="group">
-                        <div className="flex items-center gap-4 mb-5">
-                          <div className="flex items-center gap-3">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {project.tools.map((tool, i) => (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+                        key={tool.name} 
+                        className="group relative p-6 md:p-8 rounded-3xl bg-white border border-black/[0.06] hover:border-purple-900/20 hover:shadow-[0_12px_40px_rgba(88,28,135,0.06)] transition-all duration-500 flex flex-col"
+                      >
+                        {/* Header: Icon, Name, Desc */}
+                        <div className="flex flex-col mb-8 gap-4">
+                          <div className="flex items-center gap-4">
                             {tool.icon && (
-                              <div className="p-2.5 bg-black/[0.03] rounded-xl group-hover:bg-black/5 transition-all duration-300 scale-110">
-                                {React.cloneElement(tool.icon, { size: 20 })}
+                              <div className="w-12 h-12 flex items-center justify-center bg-black/[0.02] group-hover:bg-purple-50 rounded-2xl group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 text-black group-hover:text-purple-600">
+                                {React.cloneElement(tool.icon, { size: 24 })}
                               </div>
                             )}
-                            <span className="text-[15px] font-bold font-mono text-black uppercase tracking-wider">{tool.name}</span>
+                            <div className="flex flex-col justify-center">
+                              <span className="text-[16px] font-black tracking-tight text-black">{tool.name}</span>
+                              <span className="text-[10px] text-black/40 uppercase tracking-[0.2em] font-mono mt-0.5">{tool.desc}</span>
+                            </div>
                           </div>
-                          <span className="text-[9px] text-black/30 uppercase tracking-[0.2em] font-mono">{tool.desc}</span>
                         </div>
-                        <div className="pl-6 border-l border-l-black/10">
-                          <p className="text-[14px] text-black leading-relaxed opacity-80">
-                            <span className="text-[9px] font-mono uppercase tracking-widest text-black/40 mr-3 italic">Proof:</span>
+
+                        {/* Proof Section (Inset Block) */}
+                        <div className="relative mt-auto pt-5 border-t border-black/[0.06] group-hover:border-purple-900/10 transition-colors">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-pink-500/80 group-hover:bg-pink-500 group-hover:shadow-[0_0_8px_rgba(236,72,153,0.8)] transition-all"></div>
+                            <span className="text-[9px] font-mono font-bold tracking-widest text-black/40 uppercase group-hover:text-pink-600 transition-colors">Proof of skill</span>
+                          </div>
+                          <p className="text-[14px] text-black/70 leading-relaxed group-hover:text-black/90 transition-colors">
                             {tool.proof}
                           </p>
                         </div>
-                      </div>
+                        
+                        {/* Subtle Background Glow on Hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.02] to-pink-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl" />
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               )}
 
               {/* Why / Context in Technical View */}
-              <div className="pt-20 border-t border-black/10">
-                <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">Architectural Context</h4>
-                <p className="text-[18px] text-black leading-relaxed font-normal opacity-90 max-w-4xl">
-                  {project.whyParagraph}
-                </p>
-              </div>
+              {project.whyParagraph && (
+                <div className="pt-20 border-t border-black/10">
+                  <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">Architectural Context</h4>
+                  <p className="text-[18px] text-black leading-relaxed font-normal opacity-90 max-w-4xl">
+                    {project.whyParagraph}
+                  </p>
+                </div>
+              )}
 
               {/* Technical Deep Dives (Code) */}
-              <div className="space-y-24">
-                <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">System Implementation</h4>
-                {project.technicalSections?.map((section, i) => (
-                  <div key={i} className="group">
-                    <h5 className="text-[12px] font-bold text-black mb-10 uppercase tracking-[0.3em] font-mono">{section.title}</h5>
-                    <div className="grid md:grid-cols-[1.2fr_1fr] gap-16">
-                      <div>
-                        <p className="text-[17px] text-black leading-relaxed font-normal opacity-90">
-                          {section.desc}
-                        </p>
-                      </div>
-                      {section.code && (
-                        <div className="relative group/code min-w-0">
-                          <pre className="relative text-[11px] font-mono p-7 bg-black text-white rounded-xl overflow-x-auto shadow-2xl leading-relaxed border border-white/10">
-                            <code className="language-cpp">{section.code}</code>
-                          </pre>
-                            <div className="mt-4 flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                              <span className="text-[9px] font-mono text-black/40 uppercase tracking-widest">
-                                {section.label || "System Logic"}
-                              </span>
-                            </div>
+              {project.technicalSections && (
+                <div className="space-y-24">
+                  <h4 className="text-[15px] font-mono font-bold tracking-widest text-black mb-10">System Implementation</h4>
+                  {project.technicalSections.map((section, i) => (
+                    <div key={i} className="group">
+                      <h5 className="text-[12px] font-bold text-black mb-10 uppercase tracking-[0.3em] font-mono">{section.title}</h5>
+                      <div className="grid md:grid-cols-[1.2fr_1fr] gap-16">
+                        <div>
+                          <p className="text-[17px] text-black leading-relaxed font-normal opacity-90">
+                            {section.desc}
+                          </p>
                         </div>
-                      )}
+                        {section.code && (
+                          <div className="relative group/code min-w-0 overflow-x-auto">
+                            <pre className="relative text-[11px] font-mono p-7 bg-black text-white rounded-xl overflow-x-auto shadow-2xl leading-relaxed border border-white/10">
+                              <code className="language-cpp">{section.code}</code>
+                            </pre>
+
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
               {/* Technical Learnings */}
               {project.learnings && (

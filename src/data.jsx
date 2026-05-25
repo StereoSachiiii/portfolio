@@ -1,10 +1,10 @@
 import React from 'react';
-import { Github, Linkedin, Twitter, Activity, Gauge, Binary, Terminal, Code2 } from 'lucide-react';
+import { Github, Linkedin, Twitter, Activity, Gauge, Binary, Terminal, Code2, Instagram, BookOpen } from 'lucide-react';
 import { TechIcon } from './components/TechIcon';
 
 export const data = {
   identity: {
-    name: "Sachin",
+    name: "Sachin Lakshitha",
     oneLine: "I like building things and understanding how they actually work.",
     philosophy: "Mostly backend and systems stuff — I get excited about the layers most people never see. I care a lot about writing software that's fast, honest, and well-understood.",
     photo: "/image.png",
@@ -18,8 +18,9 @@ export const data = {
     ],
     links: [
       { id: "github", icon: <Github size={18} />, url: "https://github.com/StereoSachiiii" },
-      { id: "linkedin", icon: <Linkedin size={18} />, url: "https://linkedin.com/in/sachin" },
-      { id: "twitter", icon: <Twitter size={18} />, url: "https://twitter.com/stereosachin" }
+      { id: "linkedin", icon: <Linkedin size={18} />, url: "https://linkedin.com/in/sachin-lakshitha-97425a306" },
+      { id: "medium", icon: <BookOpen size={18} />, url: "https://medium.com/@niroshasulochini" },
+      { id: "instagram", icon: <Instagram size={18} />, url: "https://instagram.com/stereoheart_sachiiii" }
     ]
   },
   projects: [
@@ -204,11 +205,12 @@ export const data = {
     {
       id: "luckyos",
       category: "OS",
-      highlight: "built from the first instruction the CPU executes",
+      highlight: "built a 16-bit real mode OS and bootloader",
       title: "LuckyOS",
       github: "https://github.com/StereoSachiiii/os-dev-project",
-      tags: "x86 Assembly · BIOS · Kernel basics",
-      description: "A tiny operating system kernel I wrote from scratch. Bootloader, VGA text mode, the whole thing. Only time I wrote assembly and honestly it was pretty wild.",
+      tags: "x86 Assembly · BIOS Interrupts · 16-bit Real Mode",
+      description: "A simple 16-bit operating system kernel and bootloader written from scratch in Assembly. It stays in real mode and uses BIOS interrupts for hardware interaction, keyboard input, and screen rendering.",
+      whyParagraph: "I wanted to understand how computers actually boot up before the operating system takes over. Instead of using GRUB, I wrote my own 512-byte bootloader to load the kernel into memory. It's a very simple system that operates entirely in 16-bit real mode, using BIOS interrupts to provide a basic command-line interface that can detect CPU features, memory, and serial ports.",
       stack: [
         { label: "x86", icon: <Terminal size={14} /> },
         { label: "Assembly", icon: <Code2 size={14} /> }
@@ -218,13 +220,81 @@ export const data = {
           name: "x86 Assembly",
           icon: <Binary size={20} />,
           desc: "Low-level machine code",
-          proof: "Wrote a custom bootloader that fits in 512 bytes, handling the transition from real mode to protected mode manually."
+          proof: "Wrote a custom bootloader that fits exactly in 512 bytes (including the 0xAA55 signature), loading the kernel from disk into memory."
         },
         {
           name: "QEMU",
           icon: <Terminal size={20} />,
           desc: "System emulator",
-          proof: "Used QEMU for rapid iteration of kernel code, debugging interrupt service routines without hardware-level risk."
+          proof: "Used QEMU for rapid iteration of kernel code, allowing me to test BIOS interrupts and hardware detection without flashing a real floppy disk."
+        }
+      ],
+      technicalSections: [
+        {
+          title: "The Boot Sector",
+          desc: "The bootloader must fit within exactly 512 bytes. It sets up the segment registers and stack, then uses BIOS INT 13h to read the kernel sectors from the disk into memory at 0x1000 before executing a far jump to hand over control.",
+          label: "BOOTLOADER.ASM",
+          code: `; A simple 16-bit bootloader that loads a kernel from the next sector.
+
+org 0x7C00               ; BIOS loads boot sector at this address
+bits 16                  ; We are in 16-bit real mode
+
+; Initialize segment registers
+xor ax, ax               
+mov ds, ax               
+mov es, ax               
+mov ss, ax               
+mov sp, 0x7C00           ; Stack grows downwards from 0x7C00
+
+; Load Kernel using INT 13h
+mov ah, 0x02             ; Function: Read Sectors
+mov al, 20               ; Number of sectors to read
+mov ch, 0                ; Cylinder 0
+mov cl, 2                ; Start sector 2 (bootloader is sector 1)
+mov dh, 0                ; Head 0
+mov dl, 0x00             ; Drive (0x00 for floppy)
+mov bx, 0x1000           ; Load to ES:BX (0x0000:0x1000)
+int 0x13                 ; Call BIOS disk service
+
+; Far jump to the loaded kernel
+jmp 0x0000:0x1000
+
+times 510 - ($ - $$) db 0 ; Pad to 510 bytes
+dw 0xAA55                ; Boot signature`
+        },
+        {
+          title: "Hardware Detection (BIOS Interrupts)",
+          desc: "Because the OS runs entirely in 16-bit real mode, it relies heavily on BIOS interrupts to interact with hardware. For example, memory detection uses INT 12h and INT 15h, and keyboard input uses INT 16h.",
+          label: "KERNEL.ASM",
+          code: `detect_memory:
+    ; Base Memory
+    mov si, mem_base_label
+    call print_string
+    int 12h                 ; Returns base memory in KB in AX
+    mov [base_mem_kb], ax
+    call print_decimal
+
+    ; Extended Memory
+    mov si, mem_ext_label
+    call print_string
+    mov ah, 0x88
+    int 0x15                ; Returns extended memory in KB in AX
+    mov [ext_mem_kb], ax
+    call print_decimal
+
+read_string:
+    pusha
+    mov bx, di              
+    .read_loop:
+        mov ah, 00h         ; BIOS INT 16h: Read key press
+        int 16h             
+        cmp al, 0Dh         ; Check for Enter
+        je .done_reading
+        mov [di], al        ; Store character
+        mov ah, 0Eh
+        int 10h             ; Print character (INT 10h)
+        inc di              
+        jmp .read_loop`
         }
       ]
     },
@@ -823,6 +893,64 @@ export const data = {
       ]
     },
     {
+      id: "devops-postmortem",
+      category: "DEVOPS",
+      highlight: "educational platform for postmortem-driven learning",
+      title: "DevOps Postmortem Platform",
+      tags: "Kubernetes · Docker · CI/CD · SRE",
+      description: "An educational platform inspired by sites like KodeKloud, but with a twist: it's built around postmortem analysis. Users are dropped into a 'broken' environment and must use observability tools to diagnose and fix the root cause of a system failure.",
+      stack: [
+        { name: "Docker", icon: <TechIcon name="docker" /> },
+        { name: "Kubernetes", icon: <TechIcon name="kubernetes" /> },
+        { name: "Linux", icon: <TechIcon name="linux" /> }
+      ],
+      whyParagraph: "The best way to learn DevOps isn't by building things that work—it's by fixing things that broke. I wanted to create a sandbox where engineers can practice high-pressure troubleshooting without real-world stakes. It's about building the muscle memory for incident response.",
+      learnings: [
+        {
+          title: "Observability is not just metrics",
+          desc: "Building scenarios for this platform taught me that a good dashboard is one that tells a story. Understanding the causal link between a network spike and a database deadlock is the core of SRE work."
+        }
+      ]
+    },
+    {
+      id: "einstein-rings",
+      category: "ML / SCIENCE",
+      highlight: "detecting gravitational lensing in sky surveys",
+      title: "Einstein Rings Detector",
+      tags: "Python · Deep Learning · Computer Vision",
+      description: "A model suite designed to identify Einstein rings—distorted light from distant galaxies—in large-scale astronomical survey data. Built to automate the detection of gravitational lensing events that are otherwise difficult to spot manually.",
+      stack: [
+        { name: "Python", icon: <TechIcon name="python" /> },
+        { name: "Computer Vision", icon: <Activity size={14} /> }
+      ],
+      whyParagraph: "Gravitational lensing is one of the most powerful tools we have for studying dark matter and the expansion of the universe. I wanted to see if I could build a computer vision pipeline that handles the specific noise and artifacts found in night sky images to find these rare events.",
+      learnings: [
+        {
+          title: "Signal vs Noise in Astronomy",
+          desc: "Astronomical images are incredibly noisy. Learning how to differentiate between a sensor artifact and a genuine gravitational arc taught me a lot about robust feature extraction in low-signal environments."
+        }
+      ]
+    },
+    {
+      id: "logic-processor",
+      category: "TOOLS",
+      highlight: "propositional logic solver for natural language",
+      title: "Sentence Logic Processor",
+      tags: "Python · Logic · Parsers",
+      description: "A utility that parses natural language sentences mixed with logical symbols to derive conclusions. It takes raw logical propositions and applies inference rules to verify if a given conclusion follows from the premises.",
+      stack: [
+        { name: "Python", icon: <TechIcon name="python" /> },
+        { name: "Logic", icon: <Terminal size={14} /> }
+      ],
+      whyParagraph: "I built this to automate some of the tedious parts of my discrete math and pure math assignments. It was a great exercise in building a small domain-specific language (DSL) and understanding how to represent logical trees in code.",
+      learnings: [
+        {
+          title: "Building a Recursive Descent Parser",
+          desc: "Representing logical priority (AND vs OR vs Implication) in a parser requires a solid understanding of grammar rules. This project was my first deep dive into how compilers actually understand the order of operations."
+        }
+      ]
+    },
+    {
       id: "gpt-tokenizer",
       category: "EXPERIMENTS",
       title: "GPT-2 Style Tokenizer",
@@ -949,8 +1077,10 @@ export const data = {
       category: "INFRASTRUCTURE / DEVOPS",
       items: [
         { name: "Docker", icon: <TechIcon name="docker" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "Containerized deployment" }, { id: "rag-pipeline", title: "RAG Pipeline", context: "Multi-service composition" }, { id: "royal-liquor", title: "Royal Beverages", context: "Dev-prod parity" }] },
+        { name: "Kubernetes", icon: <TechIcon name="kubernetes" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "Container Orchestration" }] },
         { name: "AWS", icon: <TechIcon name="amazonwebservices" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "EC2 & Nginx deployment" }] },
         { name: "Linux", icon: <TechIcon name="linux" />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "perf profiling & tuning" }] },
+        { name: "eBPF", icon: <TechIcon name="linux" />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "Kernel-level tracing" }] },
         { name: "GitHub Actions", icon: <TechIcon name="githubactions" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Automated CI/CD pipeline" }] }
       ]
     },

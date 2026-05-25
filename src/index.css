@@ -42,12 +42,18 @@ html.lenis, html.lenis body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  max-width: 100%;
+  width: 100%;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #ffffff;
+  width: 100%;
 }
 
 #root {
@@ -75,112 +81,54 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* --- Thorough Media Queries --- */
-
-/* 1. Mobile & Small Screen Optimizations (< 640px) */
-@media (max-width: 639px) {
-  h1 {
-    font-size: clamp(2rem, 10vw, 2.5rem) !important;
-    letter-spacing: -0.05em !important;
-  }
-  
-  h2 {
-    font-size: clamp(1.75rem, 8vw, 2.25rem) !important;
-    letter-spacing: -0.04em !important;
-  }
-
-  .main-container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    width: 100% !important;
-  }
-
-  /* Reduce gap in grid layouts */
-  .grid {
-    gap: 1.25rem !important;
-  }
-
-  /* Scale down tiny mono text slightly less on mobile for legibility */
-  .font-mono {
-    font-size: 9px !important;
-  }
-
-  /* Force wrap on long words to prevent overflow */
-  p, h1, h2, h3, span {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-  }
+.card {
+  position: relative;
+  transition: transform 0.2s ease;
 }
 
-/* Base class for main-container */
-.main-container {
-  width: 100%;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  box-sizing: border-box;
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 179, 198, 0.6); 
+  box-shadow: 
+    0 0 0 6px rgba(255, 179, 198, 0.5),
+    0 0 0 14px rgba(255, 179, 198, 0.2),
+    0 0 0 22px rgba(255, 179, 198, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* 2. Tablet Refinements (640px - 1024px) */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .main-container {
-    padding-left: 4rem !important;
-    padding-right: 4rem !important;
-  }
+.card:hover::before {
+  animation: gpu-border-wave 1s ease-out infinite;
 }
 
-/* 3. Desktop Refinements (1024px+) */
-@media (min-width: 1024px) {
-  .main-container {
-    padding-left: 8rem;
-    padding-right: 8rem;
-  }
+@keyframes gpu-border-wave {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.08); opacity: 0; }
 }
 
-/* 4. Ultra-wide Screen Support (> 1536px) */
-@media (min-width: 1536px) {
-  .main-container {
-    max-width: 1440px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0;
-    padding-right: 0;
-  }
+@keyframes eq {
+  from { transform: scaleY(0.2); }
+  to { transform: scaleY(1); }
 }
 
-/* 4. Touch Device Optimizations */
-@media (hover: none) {
-  /* Disable hover effects that feel "sticky" on touch */
-  .group:hover, 
-  .hover\:shadow-xl:hover,
-  .hover\:scale-110:hover {
-    transform: none !important;
-    box-shadow: none !important;
-  }
-  
-  /* Ensure tap targets are large enough */
-  button, a {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
+.card:hover .bass-bar {
+  animation: bass-spike 1s ease-out infinite;
 }
 
-/* 5. Custom Height Queries for Small/Short Screens */
-@media (max-height: 700px) {
-  .md\:h-screen {
-    height: auto !important;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
+.card:hover .normal-bar {
+  animation-play-state: running;
 }
 
-/* 6. Print Styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  body {
-    background: white;
-    color: black;
-  }
+.normal-bar {
+  animation-play-state: paused;
+}
+
+@keyframes bass-spike {
+  0% { transform: scaleY(0.2); }
+  15% { transform: scaleY(1); }
+  100% { transform: scaleY(0.2); }
 }

@@ -10,14 +10,14 @@ const Cursor = () => (
   />
 );
 
-export const Identity = ({ identity }) => {
+export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd }) => {
   return (
-    <div className="md:sticky md:top-0 md:h-screen flex flex-col justify-center py-12 md:py-0">
+    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-0 ${className}`}>
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "circOut" }}
-        className="space-y-12"
+        className="space-y-12 max-w-full md:max-w-[280px] w-full"
       >
         {/* Avatar Section */}
         <div className="relative group w-fit mx-auto md:mx-0">
@@ -69,19 +69,19 @@ export const Identity = ({ identity }) => {
           }}
         >
           <div className="space-y-1">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
+            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
               {identity.name}
             </h1>
             <motion.p
               variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-              className="text-black text-lg font-bold tracking-tight leading-tight max-w-[280px]"
+              className="text-black text-lg font-bold tracking-tight leading-tight max-w-xs md:max-w-[280px]"
             >
               {identity.oneLine}<Cursor />
             </motion.p>
           </div>
           <motion.p
             variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-            className="text-black text-[13px] leading-relaxed max-w-[300px] font-medium"
+            className="text-black text-[13px] leading-relaxed max-w-full md:max-w-[300px] font-medium"
           >
             {identity.philosophy}
           </motion.p>
@@ -92,20 +92,28 @@ export const Identity = ({ identity }) => {
           <h4 className="text-[10px] font-mono font-bold tracking-[0.25em] text-black">
             what I build with!
           </h4>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 w-full max-w-full">
             {identity.stack?.map((tech, i) => (
-              <motion.div 
-                key={tech.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + (i * 0.08), duration: 0.35, ease: "easeOut" }}
-                whileHover={{ y: -3, boxShadow: "0 8px 24px -4px rgba(0,0,0,0.12)", transition: { type: "spring", stiffness: 500, damping: 20 } }}
+              <motion.div
+                key={i}
+                initial="hidden"
+                animate="visible"
+                whileHover="hover"
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white border border-black/[0.1] text-[13px] text-black hover:border-black/25 transition-colors cursor-default font-bold shadow-sm"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { delay: 0.5 + (i * 0.08), duration: 0.35, ease: "easeOut" } },
+                  hover: { y: -3, boxShadow: "0 8px 24px -4px rgba(0,0,0,0.12)", transition: { type: "spring", stiffness: 500, damping: 20 } }
+                }}
+                onHoverStart={onHoverStart}
+                onHoverEnd={onHoverEnd}
+                className="flex items-center gap-2 sm:gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-transparent border border-black/[0.1] text-[13px] sm:text-[15px] text-black hover:border-black/25 transition-colors cursor-default font-bold"
               >
                 <motion.div
-                  className="w-5 h-5 flex items-center justify-center"
-                  whileHover={{ scale: 1.2, rotate: -5, transition: { type: "spring", stiffness: 400, damping: 15 } }}
+                  className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center origin-center"
+                  variants={{
+                    hover: { scale: 1.9, rotate: -10, transition: { type: "spring", stiffness: 400, damping: 12 } }
+                  }}
                 >
                   {tech.icon}
                 </motion.div>
@@ -116,27 +124,33 @@ export const Identity = ({ identity }) => {
         </div>
 
         {/* Social Links */}
-        <div className="flex gap-4 pt-4">
-          {identity.links?.map((link, i) => (
-            <motion.a 
-              key={link.id} 
-              href={link.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6 + (i * 0.1) }}
-              whileHover={{ 
-                scale: 1.1, 
-                rotate: i % 2 === 0 ? -4 : 4,
-                transition: { type: "spring", stiffness: 400, damping: 20 }
-              }}
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-colors"
-            >
-              {link.icon}
-            </motion.a>
-          ))}
+        <div className="pt-8">
+          <h4 className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.4em] text-black/50 uppercase mb-5">
+            see what I'm up to!
+          </h4>
+          <div className="flex gap-4 sm:gap-5">
+            {identity.links?.map((link, i) => (
+              <motion.a 
+                key={link.id} 
+                href={link.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + (i * 0.1) }}
+                whileHover={{ 
+                  scale: 1.25, 
+                  y: -6,
+                  rotate: i % 2 === 0 ? -12 : 12,
+                  transition: { type: "spring", stiffness: 400, damping: 10 }
+                }}
+                whileTap={{ scale: 0.85 }}
+                className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-2xl hover:shadow-black/10 transition-colors [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6"
+              >
+                {link.icon}
+              </motion.a>
+            ))}
+          </div>
         </div>
       </motion.div>
     </div>

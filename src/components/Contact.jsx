@@ -124,7 +124,7 @@ export const Contact = ({ links }) => {
               <h4 className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-black/50">
                 {contactConfig.emailHeading}
               </h4>
-              <a href={`mailto:${contactConfig.email}`} className="block text-xl font-bold hover:text-black/60 transition-colors">
+              <a href={`mailto:${contactConfig.email}`} className="block text-lg md:text-xl font-bold hover:text-black/60 transition-colors break-all">
                 {contactConfig.email}
               </a>
             </div>
