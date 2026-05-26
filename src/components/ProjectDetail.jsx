@@ -93,18 +93,96 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       </div>
       <p className="text-sm font-medium text-black mb-12 max-w-2xl leading-relaxed">{project.tags}</p>
 
-      {/* Metrics Header Row */}
-      {project.metrics && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 border-y border-black/5 py-10">
-          {project.metrics.map(m => (
-            <div key={m.label} className="group">
-              <p className="text-[10px] text-black/40 uppercase tracking-[0.3em] mb-3 font-mono">{m.label}</p>
-              <p className="text-3xl font-semibold text-black leading-tight tracking-tight">{m.value}</p>
-              {m.sub && <p className="text-[11px] text-black mt-2 italic font-medium">{m.sub}</p>}
+      {/* Top Section: Metrics + Tech Stack */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-20 mb-20 items-start">
+        {/* Left 50% - Bento Box Metrics */}
+        {project.metrics && (
+          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-1">
+            {project.metrics.map((m, index) => {
+              const isFeatured = index === 0;
+              return (
+                <div 
+                  key={m.label} 
+                  className={`group relative overflow-hidden bg-white/60 border border-black/5 rounded-lg p-6 md:p-8 hover:bg-white hover:border-black/10 hover:shadow-xl hover:shadow-black/5 transition-all duration-500 flex flex-col justify-center min-w-0 ${
+                    isFeatured ? 'md:col-span-2 md:row-span-1' : 'md:col-span-1 md:row-span-1'
+                  }`}
+                >
+                  <p className={`font-mono text-black/40 uppercase tracking-[0.3em] mb-4 relative z-10 ${isFeatured ? 'text-[11px]' : 'text-[9px]'}`}>
+                    {m.label}
+                  </p>
+                  <p className={`font-black text-black leading-none tracking-tight mb-3 relative z-10 break-words hyphens-auto ${isFeatured ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}>
+                    {m.value}
+                  </p>
+                  {m.sub && (
+                    <p className={`text-black/60 font-medium leading-relaxed relative z-10 ${isFeatured ? 'text-[13px] max-w-sm mt-4' : 'text-[11px] mt-2'}`}>
+                      {m.sub}
+                    </p>
+                  )}
+                  
+                  {/* Subtle gradient glow effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Right 50% - Tech Stack */}
+        {project.stack && (
+          <div className="flex flex-col xl:items-start pt-2 w-full min-w-0">
+            <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-5">Tech Stack</span>
+            <div className="grid grid-cols-4 gap-1 w-full">
+              {project.stack.map((item, index) => {
+                let layoutClass = "flex-col items-center justify-center gap-3 p-4"; 
+                let spanClass = "col-span-2 md:col-span-1 md:row-span-1";
+                let textClass = "text-[10px] text-center";
+                let iconSize = 18;
+                
+                if (index === 0) {
+                  spanClass = "col-span-4 md:col-span-2 md:row-span-2";
+                  layoutClass = "flex-col items-start justify-between p-6 md:p-8";
+                  textClass = "text-[16px] md:text-[20px] mb-4 text-left";
+                  iconSize = 40;
+                } else if (index === 1) {
+                  spanClass = "col-span-4 md:col-span-2 md:row-span-1";
+                  layoutClass = "flex-row items-center justify-between p-5 md:p-6";
+                  textClass = "text-[13px] md:text-[14px] text-left";
+                  iconSize = 24;
+                } else if (index === 6) {
+                  spanClass = "col-span-4 md:col-span-2 md:row-span-1";
+                  layoutClass = "flex-row items-center justify-between p-4 md:p-5";
+                  textClass = "text-[12px] text-left";
+                  iconSize = 20;
+                }
+
+                return (
+                  <button 
+                    key={item.name}
+                    onClick={handleStackClick}
+                    className={`group relative overflow-hidden bg-white/60 border border-black/5 hover:border-black/10 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all duration-500 rounded-lg flex min-w-0 ${spanClass} ${layoutClass}`}
+                  >
+                    <span className={`font-mono font-bold text-black uppercase tracking-widest break-words min-w-0 line-clamp-2 ${textClass}`}>
+                      {item.name}
+                    </span>
+                    <div className="relative shrink-0">
+                      <div className="absolute right-0 bottom-full mb-3 px-3 py-1.5 bg-black text-white text-[9px] font-mono uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl origin-bottom-right">
+                        Implementation proof ↗
+                        <div className="absolute top-full right-4 border-4 border-transparent border-t-black"></div>
+                      </div>
+                      <div className="transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6">
+                        {React.cloneElement(item.icon, { size: iconSize })}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          ))}
-        </div>
-      )}
+            <p className="text-[10px] font-mono text-black/40 mt-5 leading-relaxed">
+              Click any tool to jump to technical sections
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* View Toggle */}
       {(project.overview || project.technicalSections) && (
@@ -133,7 +211,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       <div className="space-y-12">
         <div className="max-w-5xl">
           {view === 'overview' ? (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-12 lg:gap-20">
+            <div className="grid grid-cols-1 gap-12 lg:gap-20">
               {/* Main Content Flow */}
               <div className="space-y-24 min-w-0">
 
@@ -299,35 +377,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 </motion.button>
               </div>
 
-              {/* 7. Tech Stack Sidebar */}
-              <div className="space-y-10 lg:block">
-                <div className="flex flex-wrap lg:flex-col gap-3 lg:items-end sticky top-32">
-                  <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-4">Tech Stack</span>
-                  {project.stack?.map(item => (
-                    <button 
-                      key={item.name}
-                      onClick={handleStackClick}
-                      className="group flex items-center gap-4 w-fit px-5 py-2.5 bg-white border border-black/5 hover:border-black hover:bg-black transition-all duration-300 rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
-                    >
-                      <span className="text-[12px] font-mono font-bold text-black group-hover:text-white transition-colors uppercase tracking-widest">
-                        {item.name}
-                      </span>
-                      <div className="relative">
-                        <div className="absolute right-full mr-4 top-1 px-3 py-1 bg-black text-white text-[9px] font-mono uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl">
-                          Implementation proof ↗
-                        </div>
-                        <div className="transition-transform duration-300 group-hover:scale-110">
-                          {React.cloneElement(item.icon, { size: 18 })}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                  
-                  <p className="text-[10px] font-mono text-black/40 text-right mt-6 leading-relaxed max-w-[140px]">
-                    Click to jump to technical sections
-                  </p>
-                </div>
-              </div>
+              {/* 7. Tech Stack Sidebar (Moved to top section) */}
             </div>
           ) : (
             <div className="space-y-24 min-w-0">

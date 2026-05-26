@@ -122,11 +122,6 @@ export const data = {
           desc: "After days debugging aliased mutable access with ASAN, I realized Rust's borrow checker solves the exact same problem — it just catches it at compile time instead of at 3am with a sanitizer. Made me appreciate both languages more."
         }
       ],
-      limitations: [
-        "Single-threaded ingestion",
-        "PnL ignores slippage and market impact",
-        "OFI signal not validated against live fills"
-      ],
       nextSteps: [
         "Multi-threaded parser with SPSC actually doing cross-thread work",
         "Walk-forward OFI signal validation",
