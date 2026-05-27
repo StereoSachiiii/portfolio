@@ -131,49 +131,69 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
         {project.stack && (
           <div className="flex flex-col xl:items-start pt-2 w-full min-w-0">
             <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-5">Tech Stack</span>
-            <div className="grid grid-cols-4 gap-1 w-full">
+            <div className="grid grid-cols-4 gap-0 w-full max-w-[320px] md:max-w-[380px]">
               {project.stack.map((item, index) => {
-                let layoutClass = "flex-col items-center justify-center gap-3 p-4"; 
-                let spanClass = "col-span-2 md:col-span-1 md:row-span-1";
-                let textClass = "text-[10px] text-center";
-                let iconSize = 18;
+                let layoutClass = "flex-col items-center justify-center gap-1.5 p-1"; 
+                let spanClass = "col-span-1 row-span-1 aspect-square";
+                let textClass = "text-[9px] md:text-[10px] text-center";
+                let iconSize = 20;
                 
                 if (index === 0) {
-                  spanClass = "col-span-4 md:col-span-2 md:row-span-2";
-                  layoutClass = "flex-col items-start justify-between p-6 md:p-8";
-                  textClass = "text-[16px] md:text-[20px] mb-4 text-left";
-                  iconSize = 40;
+                  spanClass = "col-span-2 row-span-2 aspect-square";
+                  layoutClass = "flex-col items-center justify-center gap-3 p-2 md:p-3";
+                  textClass = "text-[14px] md:text-[16px] text-center";
+                  iconSize = 56;
                 } else if (index === 1) {
-                  spanClass = "col-span-4 md:col-span-2 md:row-span-1";
-                  layoutClass = "flex-row items-center justify-between p-5 md:p-6";
-                  textClass = "text-[13px] md:text-[14px] text-left";
-                  iconSize = 24;
+                  spanClass = "col-span-2 row-span-1 aspect-[2/1]";
+                  layoutClass = "flex-col items-center justify-center gap-1 p-1.5 md:p-2";
+                  textClass = "text-[11px] md:text-[12px] text-center";
+                  iconSize = 28;
                 } else if (index === 6) {
-                  spanClass = "col-span-4 md:col-span-2 md:row-span-1";
-                  layoutClass = "flex-row items-center justify-between p-4 md:p-5";
-                  textClass = "text-[12px] text-left";
-                  iconSize = 20;
+                  spanClass = "col-span-2 row-span-1 aspect-[2/1]";
+                  layoutClass = "flex-col items-center justify-center gap-1 p-1.5 md:p-2";
+                  textClass = "text-[11px] md:text-[12px] text-center";
+                  iconSize = 28;
                 }
 
                 return (
-                  <button 
+                  <motion.button 
                     key={item.name}
                     onClick={handleStackClick}
-                    className={`group relative overflow-hidden bg-white/60 border border-black/5 hover:border-black/10 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all duration-500 rounded-lg flex min-w-0 ${spanClass} ${layoutClass}`}
+                    initial="rest"
+                    whileHover="hover"
+                    variants={{
+                      rest: { zIndex: 1 },
+                      hover: { zIndex: 50 }
+                    }}
+                    className={`group relative bg-white/60 border border-black/5 hover:border-black/10 hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all duration-500 rounded-none flex min-w-0 overflow-visible ${spanClass} ${layoutClass}`}
                   >
-                    <span className={`font-mono font-bold text-black uppercase tracking-widest break-words min-w-0 line-clamp-2 ${textClass}`}>
-                      {item.name}
-                    </span>
-                    <div className="relative shrink-0">
-                      <div className="absolute right-0 bottom-full mb-3 px-3 py-1.5 bg-black text-white text-[9px] font-mono uppercase tracking-widest rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10 shadow-xl origin-bottom-right">
-                        Implementation proof ↗
-                        <div className="absolute top-full right-4 border-4 border-transparent border-t-black"></div>
-                      </div>
-                      <div className="transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6">
-                        {React.cloneElement(item.icon, { size: iconSize })}
-                      </div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[calc(100%+2px)] px-2.5 py-1.5 bg-black text-white text-[8px] font-mono uppercase tracking-widest rounded opacity-0 translate-y-2 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out whitespace-nowrap pointer-events-none shadow-xl origin-bottom">
+                      Why did I use this? ↗
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-[4px] border-transparent border-t-black"></div>
                     </div>
-                  </button>
+                    <div className="relative shrink-0 order-last md:order-none">
+                      <motion.div 
+                        variants={{
+                          rest: { scale: 1, rotate: 0, y: 0 },
+                          hover: { scale: 1.65, rotate: -14, y: -6 }
+                        }}
+                        transition={{ type: "spring", stiffness: 600, damping: 10, mass: 0.8 }}
+                        className="text-black"
+                      >
+                        {React.cloneElement(item.icon, { size: iconSize })}
+                      </motion.div>
+                    </div>
+                    <motion.span 
+                      variants={{
+                        rest: { y: 0 },
+                        hover: { y: 4 }
+                      }}
+                      transition={{ type: "spring", stiffness: 600, damping: 14 }}
+                      className={`font-mono font-bold text-black uppercase tracking-widest break-words line-clamp-2 ${textClass}`}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </motion.button>
                 );
               })}
             </div>
@@ -330,51 +350,8 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 )}
 
 
-                {/* 6. Limitations / Next Steps */}
-                {(project.limitations || project.nextSteps) && (
-                  <div className="grid md:grid-cols-2 gap-20 pt-12 border-t border-black/5">
-                    {project.limitations && (
-                      <div className="space-y-8">
-                        <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">Honest Limitations</h4>
-                        <ul className="space-y-4">
-                          {project.limitations.map((item, i) => (
-                            <li key={i} className="text-[13px] font-mono text-black/60 flex items-start gap-3">
-                              <span className="mt-1.5 w-1 h-1 rounded-full bg-black/20 shrink-0"></span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {project.nextSteps && (
-                      <div className="space-y-8">
-                        <h4 className="text-[12px] font-mono font-bold tracking-widest text-black/40 uppercase italic">What's Next</h4>
-                        <ul className="space-y-4">
-                          {project.nextSteps.map((item, i) => (
-                            <li key={i} className="text-[13px] font-mono text-black flex items-start gap-3">
-                              <span className="mt-1.5 w-1 h-1 rounded-full bg-black shrink-0"></span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )}
 
-                {/* CTA for technical readers */}
-                <motion.button
-                  onClick={() => setView('technical')}
-                  whileHover={{ x: 4 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  className="group flex items-center justify-between w-full max-w-2xl px-6 py-5 rounded-2xl border border-black/10 hover:border-black/30 hover:bg-black/[0.01] transition-colors text-left"
-                >
-                  <div>
-                    <p className="text-[13px] font-bold text-black">Built without any frameworks</p>
-                    <p className="text-[12px] text-black/40 mt-0.5">See the architecture, request flow, and what I learned building this →</p>
-                  </div>
-                  <span className="text-black/20 group-hover:text-black transition-colors text-xl font-light ml-4">→</span>
-                </motion.button>
+
               </div>
 
               {/* 7. Tech Stack Sidebar (Moved to top section) */}
@@ -465,13 +442,8 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                             </div>
                           </div>
                         </div>
-
                         {/* Proof Section (Inset Block) */}
                         <div className="relative mt-auto pt-5 border-t border-black/[0.06] group-hover:border-purple-900/10 transition-colors">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-1.5 h-1.5 rounded-full bg-pink-500/80 group-hover:bg-pink-500 group-hover:shadow-[0_0_8px_rgba(236,72,153,0.8)] transition-all"></div>
-                            <span className="text-[9px] font-mono font-bold tracking-widest text-black/40 uppercase group-hover:text-pink-600 transition-colors">Proof of skill</span>
-                          </div>
                           <p className="text-[14px] text-black/70 leading-relaxed group-hover:text-black/90 transition-colors">
                             {tool.proof}
                           </p>

@@ -222,11 +222,11 @@ const ProjectCard = memo(({ project, onClick, onHoverStart, onHoverEnd }) => {
 
         {/* Technical Metrics Block */}
         {project.metrics && project.metrics.length > 0 && (
-          <div className="flex flex-col gap-1.5 border-l-2 border-black/10 pl-3 mb-2">
+          <div className="flex flex-col gap-2 border-l-2 border-black/10 pl-3 mb-2">
             {project.metrics.slice(0, 3).map((m, i) => (
-              <div key={i} className="flex items-baseline gap-2">
-                <span className="text-[11px] font-mono font-bold text-black min-w-[75px]">{m.value}</span>
-                <span className="text-[10px] font-mono text-black/50 truncate">{m.label}</span>
+              <div key={i} className="flex items-start gap-2">
+                <span className="text-[11px] font-mono font-bold text-black min-w-[75px] pt-[2px]">{m.value}</span>
+                <span className="text-[11.5px] font-medium text-black/60 leading-snug">{m.label}</span>
               </div>
             ))}
           </div>
@@ -314,8 +314,8 @@ export default function App() {
 
   const activeIndex = ['projects', 'stack', 'writing', 'contact'].indexOf(tab);
   const activeRect = tabRects[activeIndex] || { left: 0, width: 0 };
-  const windowLeft = activeRect.left - 40;
-  const windowWidth = activeRect.width + 80;
+  const maskWidth = 180;
+  const maskLeft = activeRect.left + (activeRect.width / 2) - (maskWidth / 2);
 
   useEffect(() => {
     const t = setTimeout(() => setVideoReady(true), 400);
@@ -389,7 +389,7 @@ export default function App() {
         <div className="absolute inset-0 bg-pink-50/60"></div>
       </motion.div>
 
-      <main className="relative z-10 w-full px-4 sm:px-8 md:px-16 lg:px-32 grid grid-cols-1 md:grid-cols-[280px_1fr] items-start gap-8 md:gap-20 lg:gap-32 min-w-0">
+      <main className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-[320px_1fr] items-start gap-6 md:gap-10 lg:gap-20 min-w-0">
         <Identity 
           identity={data.identity} 
           className="min-w-0 w-full" 
@@ -442,19 +442,21 @@ export default function App() {
                         style={{ 
                           bottom: '-11px', 
                           height: '24px',
+                          left: 0,
+                          width: `${maskWidth}px`,
                           WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
                           maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
                         }}
                         initial={false}
-                        animate={{ left: windowLeft, width: windowWidth }}
+                        animate={{ x: maskLeft }}
                         transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
                       >
                         {/* Reverse translate to keep path locked to screen coords */}
                         <motion.svg 
                           className="absolute top-0 pointer-events-none" 
-                          style={{ height: '24px', width: '3000px' }}
+                          style={{ height: '24px', width: '3000px', left: 0 }}
                           initial={false}
-                          animate={{ x: -windowLeft }}
+                          animate={{ x: -maskLeft }}
                           transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
                         >
                           <motion.path 

@@ -12,12 +12,12 @@ const Cursor = () => (
 
 export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd }) => {
   return (
-    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-0 ${className}`}>
+    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-4 md:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${className}`}>
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "circOut" }}
-        className="space-y-12 max-w-full md:max-w-[280px] w-full"
+        className="space-y-6 md:space-y-8 max-w-full md:max-w-[320px] w-full"
       >
         {/* Avatar Section */}
         <div className="relative group w-fit mx-auto md:mx-0">
@@ -69,19 +69,19 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
           }}
         >
           <div className="space-y-1">
-            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-black leading-none uppercase italic block">
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-black leading-none uppercase italic block">
               {identity.name}
             </h1>
             <motion.p
               variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-              className="text-black text-lg font-bold tracking-tight leading-tight max-w-xs md:max-w-[280px]"
+              className="text-black text-lg font-bold tracking-tight leading-tight max-w-xs md:max-w-[320px]"
             >
               {identity.oneLine}<Cursor />
             </motion.p>
           </div>
           <motion.p
             variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-            className="text-black text-[13px] leading-relaxed max-w-full md:max-w-[300px] font-medium"
+            className="text-black text-[13px] leading-relaxed max-w-full md:max-w-[300px] font-medium whitespace-pre-line"
           >
             {identity.philosophy}
           </motion.p>
@@ -128,7 +128,7 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
           <h4 className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.4em] text-black/50 uppercase mb-5">
             see what I'm up to!
           </h4>
-          <div className="flex gap-4 sm:gap-5">
+          <div className="flex gap-3 sm:gap-4 md:gap-5 ml-2 md:ml-3">
             {identity.links?.map((link, i) => (
               <motion.a 
                 key={link.id} 

@@ -6,7 +6,13 @@ export const data = {
   identity: {
     name: "Sachin Lakshitha",
     oneLine: "I like building things and understanding how they actually work.",
-    philosophy: "Mostly backend and systems stuff — I get excited about the layers most people never see. I care a lot about writing software that's fast, honest, and well-understood.",
+    philosophy: (
+      <>
+        Mostly <strong className="font-bold text-black">backend</strong> and <strong className="font-bold text-black">systems</strong> stuff — I get excited about the layers most people never see. I care a lot about writing software that's fast, honest, and well-understood.
+        <br /><br />
+        Outside of client work and university, mostly web apps in <strong className="font-bold text-black">Next.js</strong>, I spend time studying <strong className="font-bold text-black">memory layout</strong>, <strong className="font-bold text-black">concurrency primitives</strong>, <strong className="font-bold text-black">hardware constraints</strong>, and how <strong className="font-bold text-black">systems</strong> behave under load. The goal is to eventually <strong className="font-bold text-black">contribute</strong> to the <strong className="font-bold text-black">infrastructure</strong> that everything else depends on.
+      </>
+    ),
     photo: "/image.png",
     stack: [
       { label: "C++", icon: <TechIcon name="cplusplus" /> },
@@ -44,9 +50,9 @@ export const data = {
         { name: "Godbolt", icon: <TechIcon name="compilerexplorer" /> }
       ],
       metrics: [
-        { label: "Parser Throughput (L1)", value: "48.29M msg/s", sub: "Processes 48 million market events per second" },
-        { label: "OrderBook Latency (L3)", value: "69.9ns avg", sub: "Reacts to market events in ~70 billionths of a second" },
-        { label: "Realized PnL", value: "$14,398", sub: "Simulated profit on full-day NASDAQ data; all positions closed" }
+        { value: "48M msg/s", label: "parser throughput from raw bytes to a parsed order", sub: "Parser performance" },
+        { value: "70ns", label: "orderbook latency to react to a market event", sub: "Average processing time" },
+        { value: "$15k", label: "profit generated on a high-volatility backtest day", sub: "Simulated market-making" }
       ],
       pipeline: [
         { name: "ITCH File", group: "Data", desc: "Raw binary NASDAQ broadcast" },
@@ -907,74 +913,12 @@ read_string:
         }
       ]
     },
-    {
-      id: "einstein-rings",
-      category: "ML / SCIENCE",
-      highlight: "detecting gravitational lensing in sky surveys",
-      title: "Einstein Rings Detector",
-      tags: "Python · Deep Learning · Computer Vision",
-      description: "A model suite designed to identify Einstein rings—distorted light from distant galaxies—in large-scale astronomical survey data. Built to automate the detection of gravitational lensing events that are otherwise difficult to spot manually.",
-      stack: [
-        { name: "Python", icon: <TechIcon name="python" /> },
-        { name: "Computer Vision", icon: <Activity size={14} /> }
-      ],
-      whyParagraph: "Gravitational lensing is one of the most powerful tools we have for studying dark matter and the expansion of the universe. I wanted to see if I could build a computer vision pipeline that handles the specific noise and artifacts found in night sky images to find these rare events.",
-      learnings: [
-        {
-          title: "Signal vs Noise in Astronomy",
-          desc: "Astronomical images are incredibly noisy. Learning how to differentiate between a sensor artifact and a genuine gravitational arc taught me a lot about robust feature extraction in low-signal environments."
-        }
-      ]
-    },
-    {
-      id: "logic-processor",
-      category: "TOOLS",
-      highlight: "propositional logic solver for natural language",
-      title: "Sentence Logic Processor",
-      tags: "Python · Logic · Parsers",
-      description: "A utility that parses natural language sentences mixed with logical symbols to derive conclusions. It takes raw logical propositions and applies inference rules to verify if a given conclusion follows from the premises.",
-      stack: [
-        { name: "Python", icon: <TechIcon name="python" /> },
-        { name: "Logic", icon: <Terminal size={14} /> }
-      ],
-      whyParagraph: "I built this to automate some of the tedious parts of my discrete math and pure math assignments. It was a great exercise in building a small domain-specific language (DSL) and understanding how to represent logical trees in code.",
-      learnings: [
-        {
-          title: "Building a Recursive Descent Parser",
-          desc: "Representing logical priority (AND vs OR vs Implication) in a parser requires a solid understanding of grammar rules. This project was my first deep dive into how compilers actually understand the order of operations."
-        }
-      ]
-    },
-    {
-      id: "gpt-tokenizer",
-      category: "EXPERIMENTS",
-      title: "GPT-2 Style Tokenizer",
-      github: "https://github.com/StereoSachiiii/GPT-2-style-BPE",
-      highlight: "cute little BPE implementation",
-      tags: "Python · ML · Tokenization · BPE",
-      description: "A from-scratch implementation of Byte Pair Encoding (BPE), the same tokenization algorithm used by GPT-2. Built because I wanted to understand how a model actually 'sees' text before the embeddings happen.",
-      stack: [
-        { name: "Python", icon: <TechIcon name="python" /> }
-      ],
-      whyParagraph: "Tokenization is the foundation of LLMs, but most people just treat it as a black box. I wanted to see how you actually build a vocabulary from scratch and handle sub-word splits.",
-      buildStory: "Wrote this while following along with some research papers. It was a lot of fun to see how common character pairs gradually merge into meaningful tokens. It's simple, but it works.",
-      learnings: [
-        {
-          title: "The beauty of BPE",
-          desc: "It's such an elegant way to handle the vocabulary problem. You start with bytes and end up with words, and it's all just counting frequencies."
-        }
-      ],
-      metrics: [
-        { label: "Vocabulary Size", value: "50,257", sub: "Same as GPT-2's base vocab" },
-        { label: "Training Speed", value: "4ms", sub: "Per-epoch latency for token merges" },
-        { label: "Context Window", value: "0", sub: "It just cuts the text, doesn't think yet" }
-      ]
-    },
+
     {
       id: "piano-tiles",
       category: "EXPERIMENTS",
       title: "Piano Tiles",
-      highlight: "pure fun, no serious engineering",
+      highlight: "pure fun, and experiments",
       tags: "JavaScript · HTML5 · CSS3 · GameDev",
       description: "A simple clone of the Piano Tiles game. No high-performance systems, no complex backend — just a fun little project to practice DOM manipulation and event handling. Sometimes you just need to build something that moves.",
       stack: [
@@ -1052,7 +996,7 @@ read_string:
       items: [
         { name: "C++", icon: <TechIcon name="cplusplus" />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "orderbook, OFI pipeline, object pool" }] },
         { name: "Go", icon: <TechIcon name="go" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "JSON-RPC interception layer" }] },
-        { name: "Python", icon: <TechIcon name="python" />, projects: [{ id: "rag-pipeline", title: "RAG Pipeline", context: "semantic search & ingestion" }, { id: "pysqlite", title: "PySQLITE", context: "metaprogramming & descriptors" }, { id: "gpt-tokenizer", title: "GPT-2 Tokenizer", context: "BPE implementation" }] },
+        { name: "Python", icon: <TechIcon name="python" />, projects: [{ id: "rag-pipeline", title: "RAG Pipeline", context: "semantic search & ingestion" }, { id: "pysqlite", title: "PySQLITE", context: "metaprogramming & descriptors" }] },
         { name: "Java", icon: <TechIcon name="java" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Spring Boot & WebSocket sync" }] },
         { name: "TypeScript", icon: <TechIcon name="typescript" />, projects: [{ id: "storeit", title: "StoreIt", context: "Next.js 15 Server Actions" }] },
         { name: "PHP", icon: <TechIcon name="php" />, projects: [{ id: "royal-liquor", title: "Royal Beverages", context: "Custom MVC framework" }] },
@@ -1075,7 +1019,7 @@ read_string:
         { name: "Kubernetes", icon: <TechIcon name="kubernetes" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "Container Orchestration" }] },
         { name: "AWS", icon: <TechIcon name="amazonwebservices" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "EC2 & Nginx deployment" }] },
         { name: "Linux", icon: <TechIcon name="linux" />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "perf profiling & tuning" }] },
-        { name: "eBPF", icon: <TechIcon name="linux" />, projects: [{ id: "backtesting", title: "Backtesting Engine", context: "Kernel-level tracing" }] },
+        { name: "eBPF", icon: <TechIcon name="linux" />, projects: [{ id: "mcpwatch", title: "MCPWatch", context: "Kernel-level RPC tracing" }] },
         { name: "GitHub Actions", icon: <TechIcon name="githubactions" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Automated CI/CD pipeline" }] }
       ]
     },
