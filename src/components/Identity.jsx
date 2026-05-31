@@ -12,12 +12,12 @@ const Cursor = () => (
 
 export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd }) => {
   return (
-    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-4 md:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${className}`}>
+    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-4 md:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 ${className}`}>
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "circOut" }}
-        className="space-y-6 md:space-y-8 max-w-full md:max-w-[320px] w-full"
+        className="space-y-4 md:space-y-6 xl:space-y-8 max-w-full w-full min-w-0"
       >
         {/* Avatar Section */}
         <div className="relative group w-fit mx-auto md:mx-0">
@@ -69,19 +69,19 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
           }}
         >
           <div className="space-y-1">
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-black leading-none uppercase italic block">
+            <h1 className="text-2xl md:text-3xl xl:text-4xl font-black tracking-tight text-black leading-none uppercase italic block">
               {identity.name}
             </h1>
             <motion.p
               variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-              className="text-black text-lg font-bold tracking-tight leading-tight max-w-xs md:max-w-[320px]"
+              className="text-black text-base md:text-lg font-bold tracking-tight leading-tight max-w-full"
             >
               {identity.oneLine}<Cursor />
             </motion.p>
           </div>
           <motion.p
             variants={{ hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } } }}
-            className="text-black text-[13px] leading-relaxed max-w-full md:max-w-[300px] font-medium whitespace-pre-line"
+            className="text-black text-[13px] leading-relaxed max-w-full font-medium whitespace-pre-line"
           >
             {identity.philosophy}
           </motion.p>
@@ -107,7 +107,7 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
                 }}
                 onHoverStart={onHoverStart}
                 onHoverEnd={onHoverEnd}
-                className="flex items-center gap-2 sm:gap-2.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-transparent border border-black/[0.1] text-[13px] sm:text-[15px] text-black hover:border-black/25 transition-colors cursor-default font-bold"
+                className="flex items-center gap-2 sm:gap-2.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-transparent border border-black/[0.1] text-[12px] sm:text-[14px] text-black hover:border-black/25 transition-colors cursor-default font-bold"
               >
                 <motion.div
                   className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center origin-center"
@@ -124,11 +124,11 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
         </div>
 
         {/* Social Links */}
-        <div className="pt-8">
+        <div className="pt-4 md:pt-6 xl:pt-8">
           <h4 className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.4em] text-black/50 uppercase mb-5">
             see what I'm up to!
           </h4>
-          <div className="flex gap-3 sm:gap-4 md:gap-5 ml-2 md:ml-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 ml-1 md:ml-2">
             {identity.links?.map((link, i) => (
               <motion.a 
                 key={link.id} 
@@ -145,7 +145,7 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
                   transition: { type: "spring", stiffness: 400, damping: 10 }
                 }}
                 whileTap={{ scale: 0.85 }}
-                className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-2xl hover:shadow-black/10 transition-colors [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6"
+                className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center rounded-2xl text-black border border-black/10 hover:border-black/30 hover:bg-white hover:shadow-2xl hover:shadow-black/10 transition-colors [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5"
               >
                 {link.icon}
               </motion.a>

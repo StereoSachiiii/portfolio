@@ -17,7 +17,7 @@ export const Contact = ({ links }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="grid md:grid-cols-[1fr_350px] gap-12 md:gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 lg:gap-20">
         
         {/* Contact Form Section */}
         <motion.div

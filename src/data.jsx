@@ -13,7 +13,7 @@ export const data = {
         Outside of client work and university, mostly web apps in <strong className="font-bold text-black">Next.js</strong>, I spend time studying <strong className="font-bold text-black">memory layout</strong>, <strong className="font-bold text-black">concurrency primitives</strong>, <strong className="font-bold text-black">hardware constraints</strong>, and how <strong className="font-bold text-black">systems</strong> behave under load. The goal is to eventually <strong className="font-bold text-black">contribute</strong> to the <strong className="font-bold text-black">infrastructure</strong> that everything else depends on.
       </>
     ),
-    photo: "/image.png",
+    photo: "/image.webp",
     stack: [
       { label: "C++", icon: <TechIcon name="cplusplus" /> },
       { label: "Go", icon: <TechIcon name="go" /> },
@@ -206,29 +206,97 @@ export const data = {
     {
       id: "luckyos",
       category: "OS",
-      highlight: "built a 16-bit real mode OS and bootloader",
+      highlight: "built a 16-bit real mode OS and bootloader from scratch",
       title: "LuckyOS",
       github: "https://github.com/StereoSachiiii/os-dev-project",
       tags: "x86 Assembly · BIOS Interrupts · 16-bit Real Mode",
       description: "A simple 16-bit operating system kernel and bootloader written from scratch in Assembly. It stays in real mode and uses BIOS interrupts for hardware interaction, keyboard input, and screen rendering.",
-      whyParagraph: "I wanted to understand how computers actually boot up before the operating system takes over. Instead of using GRUB, I wrote my own 512-byte bootloader to load the kernel into memory. It's a very simple system that operates entirely in 16-bit real mode, using BIOS interrupts to provide a basic command-line interface that can detect CPU features, memory, and serial ports.",
+      whatIsThis: "A bootloader and a tiny OS kernel — both written in raw x86 Assembly. When a PC powers on, the BIOS loads the first 512 bytes of disk into memory and runs it. That's the bootloader. It then loads the kernel, which provides a basic shell: you can type commands, detect CPU features, check memory, and probe serial ports — all without an OS under you.",
+      metrics: [
+        { value: "512 bytes", label: "exact bootloader size including the 0xAA55 boot signature", sub: "Fits in a single floppy sector" },
+        { value: "16-bit", label: "real mode — no protected mode, no paging, direct BIOS access", sub: "Raw hardware, no abstractions" },
+        { value: "0 deps", label: "no OS, no libc, no runtime — pure Assembly from power-on", sub: "Everything is hand-written" },
+      ],
+      overviewLayers: [
+        {
+          label: 'Boot Sector',
+          tagline: 'The first 512 bytes',
+          colorBg: 'bg-orange-50',
+          colorBorder: 'border-orange-200',
+          colorIcon: 'text-orange-500',
+          colorDot: 'bg-orange-500',
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+            </svg>
+          ),
+          bullets: ['Fits exactly in 512 bytes', 'Sets up segment registers & stack', 'Loads kernel via INT 13h', 'Far-jumps to 0x1000'],
+          reveal: 'The last 2 bytes must be 0xAA55 or the BIOS refuses to run it.',
+        },
+        {
+          label: 'Kernel',
+          tagline: 'The OS core',
+          colorBg: 'bg-black/[0.02]',
+          colorBorder: 'border-black/15',
+          colorIcon: 'text-black/60',
+          colorDot: 'bg-black',
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+            </svg>
+          ),
+          bullets: ['Command-line shell loop', 'Keyboard input via INT 16h', 'Screen output via INT 10h', 'Command parser & dispatch'],
+          reveal: 'No stdlib. Every print, every read, every beep is a BIOS interrupt.',
+        },
+        {
+          label: 'BIOS Services',
+          tagline: 'The hardware layer',
+          colorBg: 'bg-blue-50',
+          colorBorder: 'border-blue-200',
+          colorIcon: 'text-blue-500',
+          colorDot: 'bg-blue-500',
+          icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+              <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-4M9 3v18M9 3h6"/>
+            </svg>
+          ),
+          bullets: ['INT 10h — video & text output', 'INT 12h / 15h — memory detect', 'INT 13h — disk read', 'INT 16h — keyboard input'],
+          reveal: 'BIOS interrupts are the only API available in real mode. The entire OS lives inside them.',
+        },
+      ],
       stack: [
-        { label: "x86", icon: <Terminal size={14} /> },
-        { label: "Assembly", icon: <Code2 size={14} /> }
+        { name: "x86 ASM", icon: <Terminal size={14} /> },
+        { name: "NASM", icon: <Code2 size={14} /> },
+        { name: "QEMU", icon: <Terminal size={14} /> },
+        { name: "GDB", icon: <TechIcon name="gdb" /> },
+        { name: "Make", icon: <TechIcon name="cmake" /> },
+        { name: "Linux", icon: <TechIcon name="linux" /> },
       ],
       tools: [
         {
           name: "x86 Assembly",
           icon: <Binary size={20} />,
           desc: "Low-level machine code",
-          proof: "Wrote a custom bootloader that fits exactly in 512 bytes (including the 0xAA55 signature), loading the kernel from disk into memory."
+          proof: "Wrote a custom bootloader that fits exactly in 512 bytes (including the 0xAA55 signature), loading the kernel from disk into memory at 0x1000 via BIOS INT 13h."
+        },
+        {
+          name: "NASM",
+          icon: <Code2 size={20} />,
+          desc: "Netwide Assembler",
+          proof: "Used NASM's org directive to set the load address to 0x7C00 and the times directive to pad the bootloader to exactly 510 bytes before the boot signature."
         },
         {
           name: "QEMU",
           icon: <Terminal size={20} />,
           desc: "System emulator",
-          proof: "Used QEMU for rapid iteration of kernel code, allowing me to test BIOS interrupts and hardware detection without flashing a real floppy disk."
-        }
+          proof: "Used QEMU for rapid iteration — qemu-system-x86_64 -fda boot.img lets you test the bootloader in seconds without flashing real hardware. Also used for stepping through boot code with GDB attached."
+        },
+        {
+          name: "GDB",
+          icon: <TechIcon name="gdb" />,
+          desc: "Debugger",
+          proof: "Attached GDB to QEMU via -s -S flags to step through bootloader execution one instruction at a time — the only way to debug something that runs before any OS is loaded."
+        },
       ],
       technicalSections: [
         {
@@ -357,10 +425,21 @@ read_string:
       ],
       featureChips: ['Product catalog','Cart & checkout','Order tracking','Stock reservation','Wishlists','Flavor profiles','Recipe pages','User accounts','Admin dashboard','Inventory management','Order management','Customer management'],
       screenshots: [
-        { label: "Storefront", placeholder: true },
-        { label: "Product page", placeholder: true },
-        { label: "Admin dashboard", placeholder: true },
-        { label: "Order management", placeholder: true },
+        { label: "Storefront", src: "/screenshots/royal/royal-1.webp" },
+        { label: "Product listing", src: "/screenshots/royal/royal-2.webp" },
+        { label: "Product page", src: "/screenshots/royal/royal-3.webp" },
+        { label: "Cart", src: "/screenshots/royal/royal-4.webp" },
+        { label: "Checkout", src: "/screenshots/royal/royal-5.webp" },
+        { label: "Order tracking", src: "/screenshots/royal/royal-6.webp" },
+        { label: "Admin dashboard", src: "/screenshots/royal/royal-7.webp" },
+        { label: "Inventory", src: "/screenshots/royal/royal-8.webp" },
+        { label: "Order management", src: "/screenshots/royal/royal-9.webp" },
+        { label: "Customer management", src: "/screenshots/royal/royal-10.webp" },
+        { label: "Product management", src: "/screenshots/royal/royal-11.webp" },
+        { label: "Warehouse view", src: "/screenshots/royal/royal-12.webp" },
+        { label: "Reports", src: "/screenshots/royal/royal-13.webp" },
+        { label: "Settings", src: "/screenshots/royal/royal-14.webp" },
+        { label: "Login", src: "/screenshots/royal/royal-15.webp" },
       ],
       description: "I built an entire e-commerce platform without touching a single framework. No Laravel, no React, no jQuery — just PHP 8.2, ES6 modules, and PostgreSQL. Every pattern in here (MVC, DI container, middleware, routing, stock reservation) is hand-rolled. I wanted to understand how web systems actually work before using libraries that do it for me.",
       technicalSections: [

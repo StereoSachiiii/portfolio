@@ -1,21 +1,28 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArchDiagram } from './ArchDiagram';
 
 export const ProjectDetail = ({ project, view, setView, onBack }) => {
   const toolsRef = useRef(null);
   const screenshotsRef = useRef(null);
+  const [lightbox, setLightbox] = useState(null); // index or null
 
+  // Close lightbox on Escape, navigate with arrow keys
   useEffect(() => {
-    if (view === 'technical') {
-      setTimeout(() => {
-        toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
-    }
-  }, [view]);
+    if (lightbox === null) return;
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setLightbox(null);
+      if (e.key === 'ArrowRight') setLightbox(i => Math.min(i + 1, project.screenshots.length - 1));
+      if (e.key === 'ArrowLeft') setLightbox(i => Math.max(i - 1, 0));
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightbox, project.screenshots?.length]);
 
-  const handleStackClick = () => {
+  const scrollToScreenshots = () => screenshotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollToTools = () => {
     setView('technical');
+    setTimeout(() => toolsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
   };
 
   return (
@@ -28,7 +35,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       className="w-full relative min-w-0"
     >
       {/* Sticky Action Bar */}
-      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-pink-50/90 backdrop-blur-md border-b border-black/5 -mx-4 md:-mx-8 px-4 md:px-8 overflow-x-clip">
+      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-pink-50/90 backdrop-blur-md border-b border-black/5 overflow-hidden">
         <button 
           onClick={onBack}
           className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.4em] text-black border border-black/10 px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-1.5 md:gap-2 group"
@@ -46,13 +53,13 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
         </a>
       </div>
       
-      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-6">
-        <h2 className="text-3xl md:text-6xl font-semibold tracking-tighter text-black leading-tight break-words">{project.title}</h2>
+      <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-6">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold tracking-tighter text-black leading-tight break-words">{project.title}</h2>
 
         {/* Card deck — click to jump to screenshots */}
         {project.screenshots && (
           <motion.button
-            onClick={() => screenshotsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            onClick={scrollToScreenshots}
             className="relative shrink-0 w-32 h-24 mt-2 cursor-pointer"
             aria-label="View screenshots"
             whileHover="fanned"
@@ -73,12 +80,16 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                     fanned: { rotate: fannedTransforms[i]?.rotate ?? 0, x: fannedTransforms[i]?.x ?? 0, y: fannedTransforms[i]?.y ?? 0, zIndex: i },
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 22, delay: i * 0.04 }}
-                  className="absolute inset-0 rounded-2xl border border-black/10 bg-white shadow-md flex items-center justify-center"
+                  className="absolute inset-0 rounded-2xl border border-black/10 bg-white shadow-md overflow-hidden flex items-center justify-center"
                   style={{ originX: '50%', originY: '80%' }}
                 >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-black/20">
-                    <rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>
-                  </svg>
+                  {s.src ? (
+                    <img src={s.src} alt={s.label} className="w-full h-full object-contain bg-black/[0.03]" />
+                  ) : (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-black/20">
+                      <rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
                 </motion.div>
               );
             })}
@@ -131,7 +142,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
         {project.stack && (
           <div className="flex flex-col xl:items-start pt-2 w-full min-w-0">
             <span className="text-[10px] font-mono font-bold text-black uppercase tracking-[0.3em] mb-5">Tech Stack</span>
-            <div className="grid grid-cols-4 gap-0 w-full max-w-[320px] md:max-w-[380px]">
+            <div className="grid grid-cols-4 gap-0 w-full max-w-[360px] lg:max-w-[400px]">
               {project.stack.map((item, index) => {
                 let layoutClass = "flex-col items-center justify-center gap-1.5 p-1"; 
                 let spanClass = "col-span-1 row-span-1 aspect-square";
@@ -158,7 +169,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 return (
                   <motion.button 
                     key={item.name}
-                    onClick={handleStackClick}
+                    onClick={scrollToTools}
                     initial="rest"
                     whileHover="hover"
                     variants={{
@@ -311,24 +322,99 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                 {project.screenshots && (
                   <div ref={screenshotsRef} className="space-y-4 scroll-mt-20">
                     <p className="text-[10px] font-mono font-bold tracking-[0.25em] text-black/30 uppercase">Screenshots</p>
-                    <div className="flex gap-4 overflow-x-auto pb-3 no-scrollbar">
+                    {/* Thumbnail strip */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {project.screenshots.map((s, i) => (
-                        <motion.div
+                        <motion.button
+                          type="button"
                           key={i}
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ delay: i * 0.08, duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-                          className="shrink-0 w-72 h-48 rounded-2xl border border-black/10 bg-black/[0.02] flex flex-col items-center justify-center gap-2 text-black/20 hover:border-black/20 hover:bg-black/[0.03] transition-colors"
+                          transition={{ delay: (i % 3) * 0.08, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                          onClick={() => {
+                            if (s.src) setLightbox(i);
+                          }}
+                          className={`group w-full rounded-2xl border border-black/10 overflow-hidden flex flex-col bg-white text-left ${
+                            s.src ? 'cursor-pointer hover:border-black/30 hover:shadow-xl hover:shadow-black/5 transition-all duration-300' : 'cursor-default bg-black/[0.02]'
+                          }`}
                         >
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                            <rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>
-                          </svg>
-                          <span className="text-[11px] font-mono">{s.label}</span>
-                        </motion.div>
+                          {s.src ? (
+                            <>
+                              <div className="w-full aspect-[4/3] bg-black/[0.03] overflow-hidden flex items-center justify-center p-2">
+                                <img
+                                  src={s.src}
+                                  alt={s.label}
+                                  className="w-full h-full object-contain drop-shadow-sm group-hover:scale-[1.03] transition-transform duration-500"
+                                />
+                              </div>
+                              <div className="w-full px-4 py-3 border-t border-black/5 flex items-center justify-between bg-white relative z-10">
+                                <span className="text-[11px] font-mono text-black font-bold uppercase tracking-wider">{s.label}</span>
+                                <span className="text-[10px] text-black/30 font-mono">↗</span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="w-full aspect-[4/3] flex flex-col items-center justify-center gap-2 text-black/20">
+                              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+                                <rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>
+                              </svg>
+                              <span className="text-[11px] font-mono">{s.label}</span>
+                            </div>
+                          )}
+                        </motion.button>
                       ))}
                     </div>
                   </div>
+                )}
+
+                {/* Lightbox */}
+                {lightbox !== null && project.screenshots[lightbox]?.src && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4"
+                    onClick={() => setLightbox(null)}
+                  >
+                    {/* Image */}
+                    <motion.div
+                      key={lightbox}
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                      className="relative max-w-5xl w-full max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <img
+                        src={project.screenshots[lightbox].src}
+                        alt={project.screenshots[lightbox].label}
+                        className="w-full h-full object-contain bg-black"
+                      />
+                      {/* Label */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-6 py-4">
+                        <p className="text-white text-[12px] font-mono">{project.screenshots[lightbox].label}</p>
+                        <p className="text-white/40 text-[10px] font-mono mt-0.5">{lightbox + 1} / {project.screenshots.length}</p>
+                      </div>
+                    </motion.div>
+
+                    {/* Nav buttons */}
+                    <div className="flex gap-4 mt-5" onClick={e => e.stopPropagation()}>
+                      <button
+                        disabled={lightbox === 0}
+                        onClick={() => setLightbox(i => i - 1)}
+                        className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-mono transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      >← Prev</button>
+                      <button
+                        onClick={() => setLightbox(null)}
+                        className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-mono transition-all"
+                      >✕ Close</button>
+                      <button
+                        disabled={lightbox === project.screenshots.length - 1}
+                        onClick={() => setLightbox(i => i + 1)}
+                        className="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-mono transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      >Next →</button>
+                    </div>
+                  </motion.div>
                 )}
 
                 {/* 2. Why / Context */}
@@ -418,7 +504,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
               {project.tools && (
                 <div className="pt-20 border-t border-black/10">
                   <h4 ref={toolsRef} className="text-[15px] font-mono font-bold tracking-widest text-black mb-12">What I used & for what</h4>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
                     {project.tools.map((tool, i) => (
                       <motion.div 
                         initial={{ opacity: 0, y: 20 }}
@@ -474,7 +560,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                   {project.technicalSections.map((section, i) => (
                     <div key={i} className="group">
                       <h5 className="text-[12px] font-bold text-black mb-10 uppercase tracking-[0.3em] font-mono">{section.title}</h5>
-                      <div className="grid md:grid-cols-[1.2fr_1fr] gap-16">
+                        <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-10 xl:gap-16">
                         <div>
                           <p className="text-[17px] text-black leading-relaxed font-normal opacity-90">
                             {section.desc}
