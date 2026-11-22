@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-// Blinking cursor — programmer's signature
+// Blinking cursor - programmer's signature
 const Cursor = () => (
   <motion.span
     animate={{ opacity: [1, 0, 1] }}
@@ -12,7 +12,7 @@ const Cursor = () => (
 
 export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd }) => {
   return (
-    <div className={`md:sticky md:top-0 md:h-screen flex flex-col justify-center pt-12 pb-6 md:py-4 md:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 ${className}`}>
+    <div className={`md:sticky md:top-4 md:max-h-[calc(100vh-2rem)] flex flex-col justify-start pt-4 pb-6 md:py-4 md:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] min-w-0 ${className}`}>
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -43,22 +43,9 @@ export const Identity = ({ identity, className = "", onHoverStart, onHoverEnd })
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </motion.button>
           </motion.div>
-          
-          {/* Status Indicator */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.8, type: "spring" }}
-            className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-sm border border-black/5"
-          >
-            <div className="relative flex items-center justify-center">
-              <div className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping opacity-20"></div>
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-white shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
-            </div>
-          </motion.div>
         </div>
 
-        {/* Heading Section — staggered reveal */}
+        {/* Heading Section - staggered reveal */}
         <motion.div
           className="space-y-4"
           initial="hidden"

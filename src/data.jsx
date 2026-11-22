@@ -8,7 +8,7 @@ export const data = {
     oneLine: "I like building things and understanding how they actually work.",
     philosophy: (
       <>
-        Mostly <strong className="font-bold text-black">backend</strong> and <strong className="font-bold text-black">systems</strong> stuff — I get excited about the layers most people never see. I care a lot about writing software that's fast, honest, and well-understood.
+        Mostly <strong className="font-bold text-black">backend</strong> and <strong className="font-bold text-black">systems</strong> stuff - I get excited about the layers most people never see. I care a lot about writing software that's fast, honest, and well-understood.
         <br /><br />
         Outside of client work and university, mostly web apps in <strong className="font-bold text-black">Next.js</strong>, I spend time studying <strong className="font-bold text-black">memory layout</strong>, <strong className="font-bold text-black">concurrency primitives</strong>, <strong className="font-bold text-black">hardware constraints</strong>, and how <strong className="font-bold text-black">systems</strong> behave under load. The goal is to eventually <strong className="font-bold text-black">contribute</strong> to the <strong className="font-bold text-black">infrastructure</strong> that everything else depends on.
       </>
@@ -36,8 +36,8 @@ export const data = {
       title: "Backtesting Engine",
       github: "https://github.com/StereoSachiiii/backtesting_engine",
       highlight: "processes 48M market events/sec",
-      tags: "A from-scratch C++ trading simulator — parses real NASDAQ data, rebuilds order books, and runs strategies against it.",
-      description: "This one started as curiosity about how trading systems actually work under the hood. It reads real NASDAQ market data, reconstructs the full order book in real time, detects signals, and simulates a market-making strategy. I wrote it in C++ because I wanted to learn what it takes to make something genuinely fast — not just 'fast enough.'",
+      tags: "A from-scratch C++ trading simulator - parses real NASDAQ data, rebuilds order books, and runs strategies against it.",
+      description: "This one started as curiosity about how trading systems actually work under the hood. It reads real NASDAQ market data, reconstructs the full order book in real time, detects signals, and simulates a market-making strategy. I wrote it in C++ because I wanted to learn what it takes to make something genuinely fast - not just 'fast enough.'",
       stack: [
         { name: "C++", icon: <TechIcon name="cplusplus" /> },
         { name: "CMake", icon: <TechIcon name="cmake" /> },
@@ -66,66 +66,66 @@ export const data = {
         { name: "PnL", group: "Execution", desc: "Real-time risk tracking" }
       ],
       timeline: [
-        { date: "Feb 11", event: "Started with a lock-free SPSC ring buffer — wanted to understand cache-line alignment and atomics" },
-        { date: "Feb 25", event: "Object pool with tagged pointers to prevent ABA — first time dealing with placement new" },
-        { date: "Mar 20", event: "MVP ITCH parser — memcpy + byte-swap approach, imagine the manual conversions on the hot path" },
-        { date: "May 05", event: "v3 orderbook overhaul — 4-layer hierarchical bitset, custom hash, OS-backed allocation" },
+        { date: "Feb 11", event: "Started with a lock-free SPSC ring buffer - wanted to understand cache-line alignment and atomics" },
+        { date: "Feb 25", event: "Object pool with tagged pointers to prevent ABA - first time dealing with placement new" },
+        { date: "Mar 20", event: "MVP ITCH parser - memcpy + byte-swap approach, imagine the manual conversions on the hot path" },
+        { date: "May 05", event: "v3 orderbook overhaul - 4-layer hierarchical bitset, custom hash, OS-backed allocation" },
         { date: "May 08", event: "Multi-level OFI signal, multi-symbol market maker, flat-array optimizations" }
       ],
-      whyParagraph: "Here's the thing about NASDAQ data — it's 10,000+ messages per second per symbol. I tried std::map first and quickly learned why that doesn't work: pointer chasing through red-black tree nodes kills your cache. std::unordered_map was better but had these random latency spikes from rehashing. So I ended up building my own data structures — a flat price-level array with a hierarchical bitset for O(1) best-bid/ask, and a custom hash table with murmur64 + linear probing for order lookups. That's where most of the interesting learning happened.",
-      buildStory: "I didn't start with the parser — I started with the boring stuff. Spent all of February building the foundation: a lock-free queue, a high-resolution timer, and an object pool that uses tagged pointers to prevent ABA during concurrent allocation. The parser came in March ('imagine this shh on the hotpath' — actual commit message). The orderbook went through three rewrites before I landed on the v3 architecture in May. 9.03 GB of real NASDAQ data from October 30, 2019 — high-volatility day. It held up.",
+      whyParagraph: "Here's the thing about NASDAQ data - it's 10,000+ messages per second per symbol. I tried std::map first and quickly learned why that doesn't work: pointer chasing through red-black tree nodes kills your cache. std::unordered_map was better but had these random latency spikes from rehashing. So I ended up building my own data structures - a flat price-level array with a hierarchical bitset for O(1) best-bid/ask, and a custom hash table with murmur64 + linear probing for order lookups. That's where most of the interesting learning happened.",
+      buildStory: "I didn't start with the parser - I started with the boring stuff. Spent all of February building the foundation: a lock-free queue, a high-resolution timer, and an object pool that uses tagged pointers to prevent ABA during concurrent allocation. The parser came in March ('imagine this shh on the hotpath' - actual commit message). The orderbook went through three rewrites before I landed on the v3 architecture in May. 9.03 GB of real NASDAQ data from October 30, 2019 - high-volatility day. It held up.",
       learnings: [
         {
           title: "Cache is everything",
-          desc: "A cache miss to DRAM costs ~200 cycles. An L1 hit costs ~4. The difference between my std::map orderbook and the flat array wasn't algorithmic complexity — it was that one pointer-chases through random memory and the other is sequential. perf confirmed it: the bottleneck was never the algorithm, it was always the memory access pattern."
+          desc: "A cache miss to DRAM costs ~200 cycles. An L1 hit costs ~4. The difference between my std::map orderbook and the flat array wasn't algorithmic complexity - it was that one pointer-chases through random memory and the other is sequential. perf confirmed it: the bottleneck was never the algorithm, it was always the memory access pattern."
         },
         {
           title: "Exception handling has hidden costs even when nothing throws",
-          desc: "C++ zero-cost exceptions aren't actually zero-cost everywhere. The compiler lays out exception tables in the binary for every potential throw site, and this affects code layout, inlining decisions, and can cause unpredictable latency at call sites even on the happy path. On the hot path, noexcept isn't just a hint — it changes what the compiler is allowed to do."
+          desc: "C++ zero-cost exceptions aren't actually zero-cost everywhere. The compiler lays out exception tables in the binary for every potential throw site, and this affects code layout, inlining decisions, and can cause unpredictable latency at call sites even on the happy path. On the hot path, noexcept isn't just a hint - it changes what the compiler is allowed to do."
         },
         {
           title: "FORCE_INLINE doesn't mean the compiler will inline",
-          desc: "I assumed __attribute__((always_inline)) was a guarantee. It's not — the compiler will still refuse it in some situations, like across translation units or when the function is too complex. I had to open Godbolt and check the actual assembly to confirm my hot path was actually inlined. This became a habit."
+          desc: "I assumed __attribute__((always_inline)) was a guarantee. It's not - the compiler will still refuse it in some situations, like across translation units or when the function is too complex. I had to open Godbolt and check the actual assembly to confirm my hot path was actually inlined. This became a habit."
         },
         {
           title: "Branch prediction is incredible, but you can help it",
-          desc: "The CPU's branch predictor is genuinely impressive, but random access patterns destroy it. Using [[likely]]/[[unlikely]] on the out-of-window and null-pointer checks helped, but the bigger win was making the common path branchless — array indexing instead of if/else chains. The hardware can't predict what you never ask it to."
+          desc: "The CPU's branch predictor is genuinely impressive, but random access patterns destroy it. Using [[likely]]/[[unlikely]] on the out-of-window and null-pointer checks helped, but the bigger win was making the common path branchless - array indexing instead of if/else chains. The hardware can't predict what you never ask it to."
         },
         {
           title: "The Avellaneda-Stoikov model",
-          desc: "This was my first real exposure to market microstructure math. The model computes optimal bid and ask quotes as a function of your current inventory and realized volatility — you quote tighter when flat, wider when you're holding a position. Understanding why the spread exists and what it compensates for changed how I think about the data I was parsing."
+          desc: "This was my first real exposure to market microstructure math. The model computes optimal bid and ask quotes as a function of your current inventory and realized volatility - you quote tighter when flat, wider when you're holding a position. Understanding why the spread exists and what it compensates for changed how I think about the data I was parsing."
         },
         {
           title: "Market microstructure is genuinely deep",
-          desc: "OFI (Order Flow Imbalance) sounds simple — bid volume minus ask volume — but the multi-level weighted version tells you a lot more. Prices move before trades happen because order book shape is information. Understanding this is what makes the difference between treating market data as numbers and actually understanding what it represents."
+          desc: "OFI (Order Flow Imbalance) sounds simple - bid volume minus ask volume - but the multi-level weighted version tells you a lot more. Prices move before trades happen because order book shape is information. Understanding this is what makes the difference between treating market data as numbers and actually understanding what it represents."
         },
         {
           title: "Synchronization is really hard",
-          desc: "The lock-free object pool looks clean but the ABA problem is subtle — two threads can CAS the same pointer even after the underlying memory has been reused. Tagged pointers with a monotonic counter fix it, but only if the counter never wraps in a visible window. I spent a long time convincing myself the memory ordering was correct across every interleaving."
+          desc: "The lock-free object pool looks clean but the ABA problem is subtle - two threads can CAS the same pointer even after the underlying memory has been reused. Tagged pointers with a monotonic counter fix it, but only if the counter never wraps in a visible window. I spent a long time convincing myself the memory ordering was correct across every interleaving."
         },
         {
           title: "Simple data structures go faster than clever ones",
           desc: "A flat array beats a balanced tree not because it's a smarter algorithm but because it's simple enough for the CPU to prefetch and the compiler to optimize. The hierarchical bitset is fast because it's just integer operations on contiguous memory. The lesson: keeping your data layout simple is a performance optimization, not a compromise."
         },
         {
-          title: "Data layout is king — TLB pressure is real",
-          desc: "The OrderBookMemory struct is a single 4096-byte-aligned allocation via VirtualAlloc/mmap. This isn't just about avoiding fragmentation — it's about TLB pressure. Every unique page your code touches needs a TLB entry. If your data is scattered across many pages, you start evicting TLB entries and paying the page-walk cost. Prefaulting the pages upfront (via memset or MAP_POPULATE) means you pay that cost once at startup, not randomly during market hours."
+          title: "Data layout is king - TLB pressure is real",
+          desc: "The OrderBookMemory struct is a single 4096-byte-aligned allocation via VirtualAlloc/mmap. This isn't just about avoiding fragmentation - it's about TLB pressure. Every unique page your code touches needs a TLB entry. If your data is scattered across many pages, you start evicting TLB entries and paying the page-walk cost. Prefaulting the pages upfront (via memset or MAP_POPULATE) means you pay that cost once at startup, not randomly during market hours."
         },
         {
           title: "The compiler deleted my code",
-          desc: "The compiler proved my result was never observed under the memory model, so it just... removed it. No warning, no error. I spent hours debugging 'missing' logic that the optimizer had legally erased. Volatile and memory barriers aren't paranoia — they're how you have a conversation with the optimizer."
+          desc: "The compiler proved my result was never observed under the memory model, so it just... removed it. No warning, no error. I spent hours debugging 'missing' logic that the optimizer had legally erased. Volatile and memory barriers aren't paranoia - they're how you have a conversation with the optimizer."
         },
         {
           title: "Store buffers are not cache coherence",
-          desc: "I assumed writing a value meant other cores could see it. Turns out store buffers sit between your core and the cache, and MESI coherence doesn't flush them. A write can sit in a store buffer for hundreds of cycles before it's visible. std::memory_order_release doesn't move data — it orders when it becomes visible."
+          desc: "I assumed writing a value meant other cores could see it. Turns out store buffers sit between your core and the cache, and MESI coherence doesn't flush them. A write can sit in a store buffer for hundreds of cycles before it's visible. std::memory_order_release doesn't move data - it orders when it becomes visible."
         },
         {
           title: "Move semantics aren't what I thought",
-          desc: "I went in thinking move semantics were about physically moving memory. They're really about value categories and overload resolution — the 'move' is a polite fiction the type system agrees to. The actual bytes often don't move at all, the compiler just stops calling the destructor on the source. Understanding this changed how I read C++ entirely."
+          desc: "I went in thinking move semantics were about physically moving memory. They're really about value categories and overload resolution - the 'move' is a polite fiction the type system agrees to. The actual bytes often don't move at all, the compiler just stops calling the destructor on the source. Understanding this changed how I read C++ entirely."
         },
         {
           title: "Borrow checking clicked in hindsight",
-          desc: "After days debugging aliased mutable access with ASAN, I realized Rust's borrow checker solves the exact same problem — it just catches it at compile time instead of at 3am with a sanitizer. Made me appreciate both languages more."
+          desc: "After days debugging aliased mutable access with ASAN, I realized Rust's borrow checker solves the exact same problem - it just catches it at compile time instead of at 3am with a sanitizer. Made me appreciate both languages more."
         }
       ],
       nextSteps: [
@@ -142,20 +142,20 @@ export const data = {
         {
           title: "OrderBook + Hierarchical Bitset",
           label: "Hot Path",
-          desc: "The book uses a flat price-level array indexed by offset from a base price — no trees, no pointer chasing. The interesting part is BBO discovery: I built a 4-layer hierarchical bitset where L0 has one bit per price level (1M bits), L1 summarizes L0, and so on up to a single uint64_t at L3. Finding best bid is just 4 TZCNT/LZCNT instructions walking down the layers. No matter how sparse the book is, it's always 4 lookups.",
+          desc: "The book uses a flat price-level array indexed by offset from a base price - no trees, no pointer chasing. The interesting part is BBO discovery: I built a 4-layer hierarchical bitset where L0 has one bit per price level (1M bits), L1 summarizes L0, and so on up to a single uint64_t at L3. Finding best bid is just 4 TZCNT/LZCNT instructions walking down the layers. No matter how sparse the book is, it's always 4 lookups.",
           code: "// Best bid: walk down 4 layers\nint find_last() const {\n  size_t i2 = 63 - __builtin_clzll(l3);\n  size_t i1 = (i2 << 6) + (63 - __builtin_clzll(l2[i2]));\n  size_t i0 = (i1 << 6) + (63 - __builtin_clzll(l1[i1]));\n  return (i0 << 6) + (63 - __builtin_clzll(l0[i0]));\n}"
         },
         {
           title: "Memory Layout",
           label: "System Architecture",
-          desc: "The entire OrderBookMemory struct is one 4096-byte-aligned allocation using VirtualAlloc on Windows or mmap on Linux — no malloc, no heap fragmentation. The object pool uses placement new for construction and tagged pointers (TaggedPtr with a monotonic counter) to prevent ABA during lock-free allocation. Guard pages between the hash index and price level arrays catch overflows at the OS level instead of corrupting silently.",
+          desc: "The entire OrderBookMemory struct is one 4096-byte-aligned allocation using VirtualAlloc on Windows or mmap on Linux - no malloc, no heap fragmentation. The object pool uses placement new for construction and tagged pointers (TaggedPtr with a monotonic counter) to prevent ABA during lock-free allocation. Guard pages between the hash index and price level arrays catch overflows at the OS level instead of corrupting silently.",
           code: "struct alignas(4096) OrderBookMemory {\n  IndexEntry order_index[INDEX_SIZE];\n  alignas(4096) char _pad0[4096]; // guard page\n  PriceLevel* price_levels[2][PRICE_WINDOW];\n  HierarchicalBitset bits[2];\n};"
         },
         {
           title: "ITCH Parser Dispatch",
           label: "Zero-Copy Decoding",
-          desc: "The parser uses a static function pointer table indexed by message type — table['A'] points to parse_add_order, table['D'] to parse_delete_order, etc. No virtual dispatch, no switch statement. The actual field parsing uses memcpy + platform-specific byte swaps (_byteswap_ushort on MSVC, __builtin_bswap16 on GCC) which the compiler turns into single instructions. The interest_mask array lets you filter by stock locate before doing any real work.",
-          code: "// Dispatch table — no switch, no vtable\nParserFn fn = table[data[0]];\nif (LIKELY(fn)) { fn(data, order); return true; }\n\n// Field parsing: memcpy + bswap = single instruction\nuint32_t v; memcpy(&v, p, 4);\nreturn __builtin_bswap32(v);"
+          desc: "The parser uses a static function pointer table indexed by message type - table['A'] points to parse_add_order, table['D'] to parse_delete_order, etc. No virtual dispatch, no switch statement. The actual field parsing uses memcpy + platform-specific byte swaps (_byteswap_ushort on MSVC, __builtin_bswap16 on GCC) which the compiler turns into single instructions. The interest_mask array lets you filter by stock locate before doing any real work.",
+          code: "// Dispatch table - no switch, no vtable\nParserFn fn = table[data[0]];\nif (LIKELY(fn)) { fn(data, order); return true; }\n\n// Field parsing: memcpy + bswap = single instruction\nuint32_t v; memcpy(&v, p, 4);\nreturn __builtin_bswap32(v);"
         }
       ],
       tools: [
@@ -181,19 +181,19 @@ export const data = {
           name: "GDB",
           icon: <TechIcon name="gdb" />,
           desc: "Low-level debugger",
-          proof: "Caught a segfault in the object pool — the pool was returning a slot before placement new finished constructing the object. Stack trace made it obvious once I saw the destructor being called on uninitialized memory."
+          proof: "Caught a segfault in the object pool - the pool was returning a slot before placement new finished constructing the object. Stack trace made it obvious once I saw the destructor being called on uninitialized memory."
         },
         {
           name: "ASAN",
           icon: <TechIcon name="llvm" />,
           desc: "Memory error detector",
-          proof: "Found a dangling pointer in the hash index after erase — the linear probing rehash was relocating an entry but the old slot's pointer was still live long enough to be dereferenced once. Subtle and would've been a nightmare without ASAN."
+          proof: "Found a dangling pointer in the hash index after erase - the linear probing rehash was relocating an entry but the old slot's pointer was still live long enough to be dereferenced once. Subtle and would've been a nightmare without ASAN."
         },
         {
           name: "Perf",
           icon: <Gauge size={20} />,
           desc: "Linux perf counters",
-          proof: "Confirmed that the realistic benchmark bottleneck was L3 cache misses, not the algorithm — the OrderBookMemory struct is large enough that it doesn't stay hot in L1/L2 under multi-symbol workloads."
+          proof: "Confirmed that the realistic benchmark bottleneck was L3 cache misses, not the algorithm - the OrderBookMemory struct is large enough that it doesn't stay hot in L1/L2 under multi-symbol workloads."
         },
         {
           name: "Godbolt",
@@ -204,177 +204,13 @@ export const data = {
       ]
     },
     {
-      id: "luckyos",
-      category: "OS",
-      highlight: "built a 16-bit real mode OS and bootloader from scratch",
-      title: "LuckyOS",
-      github: "https://github.com/StereoSachiiii/os-dev-project",
-      tags: "x86 Assembly · BIOS Interrupts · 16-bit Real Mode",
-      description: "A simple 16-bit operating system kernel and bootloader written from scratch in Assembly. It stays in real mode and uses BIOS interrupts for hardware interaction, keyboard input, and screen rendering.",
-      whatIsThis: "A bootloader and a tiny OS kernel — both written in raw x86 Assembly. When a PC powers on, the BIOS loads the first 512 bytes of disk into memory and runs it. That's the bootloader. It then loads the kernel, which provides a basic shell: you can type commands, detect CPU features, check memory, and probe serial ports — all without an OS under you.",
-      metrics: [
-        { value: "512 bytes", label: "exact bootloader size including the 0xAA55 boot signature", sub: "Fits in a single floppy sector" },
-        { value: "16-bit", label: "real mode — no protected mode, no paging, direct BIOS access", sub: "Raw hardware, no abstractions" },
-        { value: "0 deps", label: "no OS, no libc, no runtime — pure Assembly from power-on", sub: "Everything is hand-written" },
-      ],
-      overviewLayers: [
-        {
-          label: 'Boot Sector',
-          tagline: 'The first 512 bytes',
-          colorBg: 'bg-orange-50',
-          colorBorder: 'border-orange-200',
-          colorIcon: 'text-orange-500',
-          colorDot: 'bg-orange-500',
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-              <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
-            </svg>
-          ),
-          bullets: ['Fits exactly in 512 bytes', 'Sets up segment registers & stack', 'Loads kernel via INT 13h', 'Far-jumps to 0x1000'],
-          reveal: 'The last 2 bytes must be 0xAA55 or the BIOS refuses to run it.',
-        },
-        {
-          label: 'Kernel',
-          tagline: 'The OS core',
-          colorBg: 'bg-black/[0.02]',
-          colorBorder: 'border-black/15',
-          colorIcon: 'text-black/60',
-          colorDot: 'bg-black',
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-            </svg>
-          ),
-          bullets: ['Command-line shell loop', 'Keyboard input via INT 16h', 'Screen output via INT 10h', 'Command parser & dispatch'],
-          reveal: 'No stdlib. Every print, every read, every beep is a BIOS interrupt.',
-        },
-        {
-          label: 'BIOS Services',
-          tagline: 'The hardware layer',
-          colorBg: 'bg-blue-50',
-          colorBorder: 'border-blue-200',
-          colorIcon: 'text-blue-500',
-          colorDot: 'bg-blue-500',
-          icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
-              <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-4M9 3v18M9 3h6"/>
-            </svg>
-          ),
-          bullets: ['INT 10h — video & text output', 'INT 12h / 15h — memory detect', 'INT 13h — disk read', 'INT 16h — keyboard input'],
-          reveal: 'BIOS interrupts are the only API available in real mode. The entire OS lives inside them.',
-        },
-      ],
-      stack: [
-        { name: "x86 ASM", icon: <Terminal size={14} /> },
-        { name: "NASM", icon: <Code2 size={14} /> },
-        { name: "QEMU", icon: <Terminal size={14} /> },
-        { name: "GDB", icon: <TechIcon name="gdb" /> },
-        { name: "Make", icon: <TechIcon name="cmake" /> },
-        { name: "Linux", icon: <TechIcon name="linux" /> },
-      ],
-      tools: [
-        {
-          name: "x86 Assembly",
-          icon: <Binary size={20} />,
-          desc: "Low-level machine code",
-          proof: "Wrote a custom bootloader that fits exactly in 512 bytes (including the 0xAA55 signature), loading the kernel from disk into memory at 0x1000 via BIOS INT 13h."
-        },
-        {
-          name: "NASM",
-          icon: <Code2 size={20} />,
-          desc: "Netwide Assembler",
-          proof: "Used NASM's org directive to set the load address to 0x7C00 and the times directive to pad the bootloader to exactly 510 bytes before the boot signature."
-        },
-        {
-          name: "QEMU",
-          icon: <Terminal size={20} />,
-          desc: "System emulator",
-          proof: "Used QEMU for rapid iteration — qemu-system-x86_64 -fda boot.img lets you test the bootloader in seconds without flashing real hardware. Also used for stepping through boot code with GDB attached."
-        },
-        {
-          name: "GDB",
-          icon: <TechIcon name="gdb" />,
-          desc: "Debugger",
-          proof: "Attached GDB to QEMU via -s -S flags to step through bootloader execution one instruction at a time — the only way to debug something that runs before any OS is loaded."
-        },
-      ],
-      technicalSections: [
-        {
-          title: "The Boot Sector",
-          desc: "The bootloader must fit within exactly 512 bytes. It sets up the segment registers and stack, then uses BIOS INT 13h to read the kernel sectors from the disk into memory at 0x1000 before executing a far jump to hand over control.",
-          label: "BOOTLOADER.ASM",
-          code: `; A simple 16-bit bootloader that loads a kernel from the next sector.
-
-org 0x7C00               ; BIOS loads boot sector at this address
-bits 16                  ; We are in 16-bit real mode
-
-; Initialize segment registers
-xor ax, ax               
-mov ds, ax               
-mov es, ax               
-mov ss, ax               
-mov sp, 0x7C00           ; Stack grows downwards from 0x7C00
-
-; Load Kernel using INT 13h
-mov ah, 0x02             ; Function: Read Sectors
-mov al, 20               ; Number of sectors to read
-mov ch, 0                ; Cylinder 0
-mov cl, 2                ; Start sector 2 (bootloader is sector 1)
-mov dh, 0                ; Head 0
-mov dl, 0x00             ; Drive (0x00 for floppy)
-mov bx, 0x1000           ; Load to ES:BX (0x0000:0x1000)
-int 0x13                 ; Call BIOS disk service
-
-; Far jump to the loaded kernel
-jmp 0x0000:0x1000
-
-times 510 - ($ - $$) db 0 ; Pad to 510 bytes
-dw 0xAA55                ; Boot signature`
-        },
-        {
-          title: "Hardware Detection (BIOS Interrupts)",
-          desc: "Because the OS runs entirely in 16-bit real mode, it relies heavily on BIOS interrupts to interact with hardware. For example, memory detection uses INT 12h and INT 15h, and keyboard input uses INT 16h.",
-          label: "KERNEL.ASM",
-          code: `detect_memory:
-    ; Base Memory
-    mov si, mem_base_label
-    call print_string
-    int 12h                 ; Returns base memory in KB in AX
-    mov [base_mem_kb], ax
-    call print_decimal
-
-    ; Extended Memory
-    mov si, mem_ext_label
-    call print_string
-    mov ah, 0x88
-    int 0x15                ; Returns extended memory in KB in AX
-    mov [ext_mem_kb], ax
-    call print_decimal
-
-read_string:
-    pusha
-    mov bx, di              
-    .read_loop:
-        mov ah, 00h         ; BIOS INT 16h: Read key press
-        int 16h             
-        cmp al, 0Dh         ; Check for Enter
-        je .done_reading
-        mov [di], al        ; Store character
-        mov ah, 0Eh
-        int 10h             ; Print character (INT 10h)
-        inc di              
-        jmp .read_loop`
-        }
-      ]
-    },
-    {
       id: "royal-liquor",
       category: "WEB",
       highlight: "built the framework, then the app",
       title: "Royal Beverages",
       github: "https://github.com/StereoSachiiii/Royal-Beverages",
-      tags: "PHP 8.2 · Vanilla JS · PostgreSQL · Custom MVC — no Laravel, no React, no jQuery.",
-      whatIsThis: "A full online store — browse products, add to cart, checkout, track orders. There's a customer-facing storefront and a separate admin dashboard for managing inventory, orders, and customers. Every part of it, from the login system to the stock reservation logic, was written from scratch.",
+      tags: "PHP 8.2 · Vanilla JS · PostgreSQL · Custom MVC - no Laravel, no React, no jQuery.",
+      whatIsThis: "A full online store - browse products, add to cart, checkout, track orders. There's a customer-facing storefront and a separate admin dashboard for managing inventory, orders, and customers. Every part of it, from the login system to the stock reservation logic, was written from scratch.",
       showArchDiagram: true,
       overviewLayers: [
         {
@@ -390,7 +226,7 @@ read_string:
             </svg>
           ),
           bullets: ['Browse & search products', 'Add to cart, checkout', 'Track your order', 'Manage your wishlist'],
-          reveal: 'Every click sends a request to the engine — nothing happens without it.',
+          reveal: 'Every click sends a request to the engine - nothing happens without it.',
         },
         {
           label: 'The engine',
@@ -405,7 +241,7 @@ read_string:
             </svg>
           ),
           bullets: ['Handles login & sessions', 'Checks stock before reserving', 'Routes each request correctly', 'Enforces who can do what'],
-          reveal: 'Hand-rolled from scratch — no frameworks. Every rule lives here.',
+          reveal: 'Hand-rolled from scratch - no frameworks. Every rule lives here.',
         },
         {
           label: 'Stores everything',
@@ -420,7 +256,7 @@ read_string:
             </svg>
           ),
           bullets: ['Products & inventory levels', 'Orders & order history', 'Customer accounts', 'Wishlists & recipe pages'],
-          reveal: 'Over 30 pre-built read patterns power the whole site — fast and consistent.',
+          reveal: 'Over 30 pre-built read patterns power the whole site - fast and consistent.',
         },
       ],
       featureChips: ['Product catalog','Cart & checkout','Order tracking','Stock reservation','Wishlists','Flavor profiles','Recipe pages','User accounts','Admin dashboard','Inventory management','Order management','Customer management'],
@@ -441,7 +277,7 @@ read_string:
         { label: "Settings", src: "/screenshots/royal/royal-14.webp" },
         { label: "Login", src: "/screenshots/royal/royal-15.webp" },
       ],
-      description: "I built an entire e-commerce platform without touching a single framework. No Laravel, no React, no jQuery — just PHP 8.2, ES6 modules, and PostgreSQL. Every pattern in here (MVC, DI container, middleware, routing, stock reservation) is hand-rolled. I wanted to understand how web systems actually work before using libraries that do it for me.",
+      description: "I built an entire e-commerce platform without touching a single framework. No Laravel, no React, no jQuery - just PHP 8.2, ES6 modules, and PostgreSQL. Every pattern in here (MVC, DI container, middleware, routing, stock reservation) is hand-rolled. I wanted to understand how web systems actually work before using libraries that do it for me.",
       technicalSections: [
         {
           title: "Custom MVC Framework",
@@ -463,7 +299,7 @@ read_string:
         { name: "Apache", icon: <TechIcon name="apache" /> }
       ],
       metrics: [
-        { label: "Scale", value: "22 / 21 / 20", sub: "Controllers / Services / Repositories — all auto-wired by the DI container" },
+        { label: "Scale", value: "22 / 21 / 20", sub: "Controllers / Services / Repositories - all auto-wired by the DI container" },
         { label: "Database", value: "17 tables · 36 views", sub: "Full schema with JSONB aggregates, partial indexes, and ENUM types" },
         { label: "Features shipped", value: "12 domains", sub: "Cart, orders, stock, auth, wishlist, recipes, flavor profiles, admin SPA..." }
       ],
@@ -472,20 +308,20 @@ read_string:
         { name: "Middleware", group: "Entry", desc: "Auth, CSRF, RateLimit, CORS, JSON" },
         { name: "Router", group: "Core", desc: "Regex-based URI matching with groups" },
         { name: "DI Container", group: "Core", desc: "Reflection auto-wiring, singleton registry" },
-        { name: "Controller", group: "Logic", desc: "Parse input, delegate — no business logic" },
+        { name: "Controller", group: "Logic", desc: "Parse input, delegate - no business logic" },
         { name: "Service", group: "Logic", desc: "Business rules, validation" },
         { name: "Repository", group: "Data", desc: "SQL via 36 PostgreSQL views" },
         { name: "Model", group: "Data", desc: "PHP 8.2 constructor promotion" }
       ],
       timeline: [
-        { date: "Phase 1", event: "Core engine — PSR-4 autoloader, regex router, session + CSRF singletons" },
+        { date: "Phase 1", event: "Core engine - PSR-4 autoloader, regex router, session + CSRF singletons" },
         { date: "Phase 2", event: "DI container with Reflection auto-wiring and circular dependency detection" },
         { date: "Phase 3", event: "Middleware pipeline, exception hierarchy, standardized Response contract" },
         { date: "Phase 4", event: "17-table PostgreSQL schema, 36 admin views, multi-warehouse FIFO stock logic" },
-        { date: "Phase 5", event: "Admin SPA — hash-based router, dynamic module imports, localStorage state" }
+        { date: "Phase 5", event: "Admin SPA - hash-based router, dynamic module imports, localStorage state" }
       ],
-      whyParagraph: "I genuinely wanted to understand how frameworks work before using them. I couldn't explain how a DI container resolves a dependency graph, how a regex router works, or how you prevent overselling in a concurrent stock system without an ORM doing it for you. So I built all of it — and it turns out every 'magic' framework feature has a pretty understandable implementation underneath.",
-      buildStory: "What started as a bare PHP script became a full MVC-S-R system with 22 controllers, 21 services, 20 repositories, and 18 models — all auto-wired by a Reflection-based DI container with circular dependency detection. The Admin SPA is framework-less too: hash-based routing, dynamic ES6 module imports, and a manual cleanup cycle to prevent DOM memory leaks. The database ended up with 36 PostgreSQL views so the PHP code never touches raw joins.",
+      whyParagraph: "I genuinely wanted to understand how frameworks work before using them. I couldn't explain how a DI container resolves a dependency graph, how a regex router works, or how you prevent overselling in a concurrent stock system without an ORM doing it for you. So I built all of it - and it turns out every 'magic' framework feature has a pretty understandable implementation underneath.",
+      buildStory: "What started as a bare PHP script became a full MVC-S-R system with 22 controllers, 21 services, 20 repositories, and 18 models - all auto-wired by a Reflection-based DI container with circular dependency detection. The Admin SPA is framework-less too: hash-based routing, dynamic ES6 module imports, and a manual cleanup cycle to prevent DOM memory leaks. The database ended up with 36 PostgreSQL views so the PHP code never touches raw joins.",
       learnings: [
         {
           title: "Floats and money don't mix",
@@ -493,7 +329,7 @@ read_string:
         },
         {
           title: "PostgreSQL views as a clean architectural boundary",
-          desc: "36 views, one for every entity in both list and detail form. The PHP code never touches raw joins — the view is the contract. admin_list_products returns lightweight columns for table rendering. admin_detail_products returns JSONB aggregates for modals. If the schema changes, I fix the view and the application code stays the same."
+          desc: "36 views, one for every entity in both list and detail form. The PHP code never touches raw joins - the view is the contract. admin_list_products returns lightweight columns for table rendering. admin_detail_products returns JSONB aggregates for modals. If the schema changes, I fix the view and the application code stays the same."
         },
         {
           title: "Auth is way harder than it looks",
@@ -501,15 +337,15 @@ read_string:
         },
         {
           title: "Partial indexes are underused",
-          desc: "Indexing only WHERE is_active = TRUE AND deleted_at IS NULL keeps the index small and hot. A full index on a soft-deleted table is mostly wasted space that slows down every write. idx_carts_active_user is a unique partial index — only one active cart per user is enforced at the database level, not in application code."
+          desc: "Indexing only WHERE is_active = TRUE AND deleted_at IS NULL keeps the index small and hot. A full index on a soft-deleted table is mostly wasted space that slows down every write. idx_carts_active_user is a unique partial index - only one active cart per user is enforced at the database level, not in application code."
         },
         {
           title: "Building a SPA without React taught me why React exists",
-          desc: "Virtual DOM and reconciliation aren't magic — they're solutions to exact problems I ran into: state getting out of sync, DOM memory leaks from unremoved event listeners, and update logic becoming a tangled mess. Every page module now exports a cleanup() function. I get it now."
+          desc: "Virtual DOM and reconciliation aren't magic - they're solutions to exact problems I ran into: state getting out of sync, DOM memory leaks from unremoved event listeners, and update logic becoming a tangled mess. Every page module now exports a cleanup() function. I get it now."
         },
         {
           title: "Reflection-based DI is beautiful but slow",
-          desc: "Reading constructor signatures at runtime to auto-wire dependencies is elegant. It's also a syscall per class instantiation. The fix was registering everything as singletons in the ServiceProvider so resolution only happens once per request. 22 controllers, 21 services, 20 repositories — all wired, none reconstructed."
+          desc: "Reading constructor signatures at runtime to auto-wire dependencies is elegant. It's also a syscall per class instantiation. The fix was registering everything as singletons in the ServiceProvider so resolution only happens once per request. 22 controllers, 21 services, 20 repositories - all wired, none reconstructed."
         },
         {
           title: "Row-level locking is the right answer for stock",
@@ -517,9 +353,9 @@ read_string:
         }
       ],
       limitations: [
-        "Manual asset pipeline — no bundler, raw JS files",
+        "Manual asset pipeline - no bundler, raw JS files",
         "Single-threaded PHP execution model",
-        "No migration system — schema changes are raw SQL",
+        "No migration system - schema changes are raw SQL",
         "AI product recognition is schema-ready but WIP"
       ],
       nextSteps: [
@@ -537,26 +373,26 @@ read_string:
         {
           title: "Middleware Pipeline",
           label: "Chain of Responsibility",
-          desc: "The middleware stack uses a recursive closure builder — each call to createNext() wraps the remaining middleware around the final handler, producing a nested callable chain. Five layers run on every request: AuthMiddleware (session + admin flag), CSRFMiddleware (hash_equals validation), JsonMiddleware (Content-Type), CorsMiddleware, and RateLimitMiddleware (session-based sliding window, no Redis needed).",
+          desc: "The middleware stack uses a recursive closure builder - each call to createNext() wraps the remaining middleware around the final handler, producing a nested callable chain. Five layers run on every request: AuthMiddleware (session + admin flag), CSRFMiddleware (hash_equals validation), JsonMiddleware (Content-Type), CorsMiddleware, and RateLimitMiddleware (session-based sliding window, no Redis needed).",
           code: "private function createNext(array $mw, callable $final): callable {\n  if (empty($mw)) return $final;\n  $current = array_shift($mw);\n  return fn($req) => $current->handle(\n    $req,\n    $this->createNext($mw, $final)\n  );\n}"
         },
         {
           title: "Multi-Warehouse FIFO Stock",
           label: "Concurrency",
-          desc: "Stock reservation runs inside a transaction with FOR UPDATE on the stock row. This means the second concurrent request waits at the lock, reads the already-decremented quantity, and fails gracefully instead of double-booking. Available stock is calculated dynamically as quantity - reserved everywhere — it's never stored as a separate column that can drift out of sync across concurrent writes.",
+          desc: "Stock reservation runs inside a transaction with FOR UPDATE on the stock row. This means the second concurrent request waits at the lock, reads the already-decremented quantity, and fails gracefully instead of double-booking. Available stock is calculated dynamically as quantity - reserved everywhere - it's never stored as a separate column that can drift out of sync across concurrent writes.",
           code: "-- Find warehouse with most available stock, lock it\nSELECT id, warehouse_id FROM stock\nWHERE product_id = :product_id\n  AND (quantity - reserved) >= :qty\nORDER BY (quantity - reserved) DESC\nLIMIT 1\nFOR UPDATE;\n\n-- Reserve\nUPDATE stock SET reserved = reserved + :qty WHERE id = :stock_id;"
         },
         {
-          title: "Admin SPA — Hash Router",
+          title: "Admin SPA - Hash Router",
           label: "Framework-less SPA",
-          desc: "The admin panel is a single PHP shell that loads once. Navigation is hash-based (#products, #orders). Each route in ROUTE_MAP maps to a dynamic ES6 import — the module is loaded on demand, its view() function renders HTML into the <main> element, and its init() function returns a { cleanup() } object. Before every navigation, the previous cleanup() runs to remove event listeners and cancel any pending requests. Last visited page persists to localStorage.",
+          desc: "The admin panel is a single PHP shell that loads once. Navigation is hash-based (#products, #orders). Each route in ROUTE_MAP maps to a dynamic ES6 import - the module is loaded on demand, its view() function renders HTML into the <main> element, and its init() function returns a { cleanup() } object. Before every navigation, the previous cleanup() runs to remove event listeners and cancel any pending requests. Last visited page persists to localStorage.",
           code: "export const ROUTE_MAP = {\n  'products': {\n    module: () => import('./pages/Products/Products.js'),\n    view: 'Products',\n    init: 'initProducts'\n  },\n  // 18+ pages\n};\n// On navigate:\nawait cleanupActiveHandler();\nconst mod = await route.module();\ndocument.getElementById('content').innerHTML = mod[route.view]();\nactiveCleanup = mod[route.init]();"
         },
         {
           title: "PostgreSQL JSON Aggregation",
           label: "Schema Design",
-          desc: "Every entity has two views: admin_list_* for table rendering (lightweight columns) and admin_detail_* for detail modals (rich JSONB aggregates). This means the PHP Repository makes one query and gets back a complete, deeply nested data structure — stock by warehouse, average rating, order history — without ORMs or N+1 queries. 36 views total.",
-          code: "CREATE VIEW admin_detail_products AS\nSELECT p.*,\n  -- Stock by warehouse as JSON array\n  (SELECT JSON_AGG(row_to_json(t)) FROM (\n    SELECT w.name, s.quantity, s.reserved\n    FROM stock s\n    JOIN warehouses w ON s.warehouse_id = w.id\n    WHERE s.product_id = p.id\n  ) t) as stock_by_warehouse,\n  -- Average rating\n  (SELECT AVG(rating) FROM feedback f\n   WHERE f.product_id = p.id\n   AND f.is_active = TRUE) as avg_rating\nFROM products p WHERE p.deleted_at IS NULL;"
+          desc: "Every entity has two views: admin_list_* for table rendering (lightweight columns) and admin_detail_* for detail modals (rich JSONB aggregates). This means the PHP Repository makes one query and gets back a complete, deeply nested data structure - stock by warehouse, average rating, order history - without ORMs or N+1 queries. 36 views total.",
+          code: "CREATE VIEW admin_detail_products AS\nSELECT p.*,\n - Stock by warehouse as JSON array\n  (SELECT JSON_AGG(row_to_json(t)) FROM (\n    SELECT w.name, s.quantity, s.reserved\n    FROM stock s\n    JOIN warehouses w ON s.warehouse_id = w.id\n    WHERE s.product_id = p.id\n  ) t) as stock_by_warehouse,\n - Average rating\n  (SELECT AVG(rating) FROM feedback f\n   WHERE f.product_id = p.id\n   AND f.is_active = TRUE) as avg_rating\nFROM products p WHERE p.deleted_at IS NULL;"
         }
       ],
       tools: [
@@ -596,7 +432,7 @@ read_string:
       id: "reservation",
       category: "WEB",
       highlight: "drag a stall, watch the price recalculate in real time",
-      title: "Colombo Book Fair — Stall Reservation",
+      title: "Colombo Book Fair - Stall Reservation",
       github: "https://github.com/StereoSachiiii/reservation_system",
       tags: "Spring Boot · React · WebSocket · Stripe · AWS",
       description: "A real-time booking platform I built with a team for the Colombo International Book Fair. You can drag stalls around on a live floor map and the price updates instantly based on where you place it. The fun part was making it sync across everyone's screen in under 100ms.",
@@ -620,7 +456,7 @@ read_string:
         { date: "Mar 01", event: "TLS via Nginx, CI/CD pipeline on AWS" },
         { date: "Mar 05", event: "RAG-powered help bot, debounced live pricing" }
       ],
-      whyParagraph: "The booking flow was straightforward — the pricing engine was the fun part. Every stall has a position on the floor plan, and we wanted the price to reflect how good that spot actually is: close to an entrance? More expensive. Stuck in a corner? Cheaper. So we built this spatial scoring system that recalculates in real time as you drag stalls around. It felt like building a tiny physics engine.",
+      whyParagraph: "The booking flow was straightforward - the pricing engine was the fun part. Every stall has a position on the floor plan, and we wanted the price to reflect how good that spot actually is: close to an entrance? More expensive. Stuck in a corner? Cheaper. So we built this spatial scoring system that recalculates in real time as you drag stalls around. It felt like building a tiny physics engine.",
       buildStory: "Started as a university assignment but we got really into it. I handled the backend and security, and worked with four other people who are genuinely great engineers. We went from a classroom scaffold to something running on AWS with real vendors using it at the actual book fair. Seeing people book stalls on their phones with our system was pretty surreal.",
       learnings: [
         {
@@ -641,8 +477,8 @@ read_string:
         }
       ],
       limitations: [
-        "In-memory STOMP broker — doesn't survive server restart",
-        "Single EC2 instance — no horizontal scaling",
+        "In-memory STOMP broker - doesn't survive server restart",
+        "Single EC2 instance - no horizontal scaling",
         "Pricing engine not validated against real foot traffic data"
       ],
       nextSteps: [
@@ -654,7 +490,7 @@ read_string:
         {
           title: "Spatial Pricing Engine",
           label: "Real-time Calculation",
-          desc: "The core problem: how do you price a physical location on a floor plan without manually setting every stall's price? The answer is treating the floor as a spatial field. Every stall has a centroid in normalized coordinate space (0–100). Influence zones — entrances, food courts, main stages — each have a position, radius, and intensity. For every stall, the engine calculates a visibility contribution using inverse distance falloff (linear or exponential). An edge proximity penalty subtracts from any stall within 2% of the floor boundary. The tricky part was debouncing: we used client-side calculation for live preview and a 300ms debounced backend sync for persistence.",
+          desc: "The core problem: how do you price a physical location on a floor plan without manually setting every stall's price? The answer is treating the floor as a spatial field. Every stall has a centroid in normalized coordinate space (0 - 100). Influence zones - entrances, food courts, main stages - each have a position, radius, and intensity. For every stall, the engine calculates a visibility contribution using inverse distance falloff (linear or exponential). An edge proximity penalty subtracts from any stall within 2% of the floor boundary. The tricky part was debouncing: we used client-side calculation for live preview and a 300ms debounced backend sync for persistence.",
           code: "// Spatial contribution per influence zone\ndouble d = distance(stall.centroid, zone.position);\nif (d < zone.radius)\n  score += zone.intensity * (1 - d / zone.radius); // linear falloff"
         },
         {
@@ -680,7 +516,7 @@ read_string:
           name: "Spring Boot",
           icon: <TechIcon name="spring" />,
           desc: "Java backend framework",
-          proof: "Configured a tiered security filter chain — Bucket4j rate limiting → JWT validation → method-level @PreAuthorize. Managed @Transactional boundaries strictly at the service layer to ensure ACID compliance across multi-step reservation flows."
+          proof: "Configured a tiered security filter chain - Bucket4j rate limiting → JWT validation → method-level @PreAuthorize. Managed @Transactional boundaries strictly at the service layer to ensure ACID compliance across multi-step reservation flows."
         },
         {
           name: "PostgreSQL",
@@ -698,7 +534,7 @@ read_string:
           name: "AWS EC2 + Nginx",
           icon: <TechIcon name="amazonwebservices" />,
           desc: "Production deployment",
-          proof: "Deployed on t3.micro with Nginx as SSL termination layer and reverse proxy. Set up GitHub Actions CI/CD pipeline — push to main triggers build, test, and deploy automatically."
+          proof: "Deployed on t3.micro with Nginx as SSL termination layer and reverse proxy. Set up GitHub Actions CI/CD pipeline - push to main triggers build, test, and deploy automatically."
         },
         {
           name: "GitHub Actions",
@@ -721,7 +557,7 @@ read_string:
       title: "Modular RAG Pipeline",
       github: "https://github.com/StereoSachiiii/rag-pipeline",
       tags: "Python · pgvector · FastAPI · Groq · Docker",
-      description: "A RAG pipeline I built from scratch to understand what's actually happening behind tools like LangChain and Pinecone. No managed vector databases, no orchestration libraries — just pgvector, an HNSW index, and a local embedding model. I wanted to see how retrieval actually works.",
+      description: "A RAG pipeline I built from scratch to understand what's actually happening behind tools like LangChain and Pinecone. No managed vector databases, no orchestration libraries - just pgvector, an HNSW index, and a local embedding model. I wanted to see how retrieval actually works.",
       stack: [
         { name: "Python", icon: <TechIcon name="python" /> },
         { name: "PostgreSQL", icon: <TechIcon name="postgresql" /> },
@@ -733,12 +569,12 @@ read_string:
         { label: "Providers", value: "Abstract", sub: "Swappable LLM interface" },
         { label: "Chunking", value: "Semantic", sub: "Header-aware markdown splitting" }
       ],
-      whyParagraph: "I kept using RAG tools without really understanding them. Like, how does a question about 'resetting passwords' find the right paragraph without any keyword matching? I wanted to build one myself to figure that out. Turns out when you own the index, search becomes a systems problem — and it's way more interesting than just calling an API.",
-      buildStory: "Started by just trying to understand the distance metrics in pgvector — cosine similarity vs Euclidean distance. Picked a 384-dimension model (all-MiniLM-L6-v2) because it has a great speed-to-accuracy ratio. The biggest headache was chunking: naive fixed-size splitting kept cutting right through the middle of code blocks. Header-aware splitting fixed that and made a huge difference in retrieval quality.",
+      whyParagraph: "I kept using RAG tools without really understanding them. Like, how does a question about 'resetting passwords' find the right paragraph without any keyword matching? I wanted to build one myself to figure that out. Turns out when you own the index, search becomes a systems problem - and it's way more interesting than just calling an API.",
+      buildStory: "Started by just trying to understand the distance metrics in pgvector - cosine similarity vs Euclidean distance. Picked a 384-dimension model (all-MiniLM-L6-v2) because it has a great speed-to-accuracy ratio. The biggest headache was chunking: naive fixed-size splitting kept cutting right through the middle of code blocks. Header-aware splitting fixed that and made a huge difference in retrieval quality.",
       learnings: [
         {
           title: "Meaning is just geometry",
-          desc: "This is the thing that blew my mind. How does a question about 'resetting passwords' find the right paragraph without any keyword matching? Because meaning gets encoded as coordinates in space, and similar meanings end up near each other. Once I understood that, tools like Pinecone and LangChain stopped being magic — they're just wrappers around that one idea."
+          desc: "This is the thing that blew my mind. How does a question about 'resetting passwords' find the right paragraph without any keyword matching? Because meaning gets encoded as coordinates in space, and similar meanings end up near each other. Once I understood that, tools like Pinecone and LangChain stopped being magic - they're just wrappers around that one idea."
         },
         {
           title: "How you chunk the text matters more than which LLM you use",
@@ -746,7 +582,7 @@ read_string:
         },
         {
           title: "HNSW indexing is really cool",
-          desc: "Brute force cosine similarity scales linearly with your data. HNSW builds a graph structure for approximate nearest neighbor search — it turns the problem into a graph traversal. Query times stay sub-50ms even as the document count grows. The math behind it is genuinely elegant."
+          desc: "Brute force cosine similarity scales linearly with your data. HNSW builds a graph structure for approximate nearest neighbor search - it turns the problem into a graph traversal. Query times stay sub-50ms even as the document count grows. The math behind it is genuinely elegant."
         }
       ],
       limitations: [
@@ -798,10 +634,10 @@ read_string:
       id: "storeit",
       category: "WEB",
       highlight: "server-side file orchestration & storage",
-      title: "StoreIt — Cloud Storage",
+      title: "StoreIt - Cloud Storage",
       github: "https://github.com/StereoSachiiii/StoreIt",
       tags: "Next.js 15 · Appwrite · TypeScript · Tailwind · Shadcn",
-      description: "A cloud storage app like Google Drive — login, upload files, use them anywhere. I built it with Next.js 15 to see how far Server Actions and Appwrite can go as a full backend replacement. It was also an excuse to play with the newest React 19 features.",
+      description: "A cloud storage app like Google Drive - login, upload files, use them anywhere. I built it with Next.js 15 to see how far Server Actions and Appwrite can go as a full backend replacement. It was also an excuse to play with the newest React 19 features.",
       stack: [
         { name: "Next.js", icon: <TechIcon name="nextdotjs" /> },
         { name: "TypeScript", icon: <TechIcon name="typescript" /> },
@@ -813,8 +649,8 @@ read_string:
         { label: "Auth", value: "OTP / Session", sub: "Secure multi-factor authentication flow" },
         { label: "Performance", value: "Edge Ready", sub: "Optimized for Vercel & Appwrite Cloud" }
       ],
-      whyParagraph: "I wanted to build something that's more than just fetching data. A cloud storage app forces you to think about binary streams, mime-type validation, and managing state across server and client. Using Appwrite let me focus on the interesting orchestration part — how does a file actually get from someone's desktop to a secure bucket while keeping all the metadata searchable?",
-      buildStory: "The biggest surprise was how much the server/client boundary in Next.js 15 trips you up. Some of my auth code was accidentally trying to use browser APIs on the server. Refactoring that was a deep lesson in how these modern frameworks bridge the network gap. The file categorization engine was the fun part — it sorts uploads into logical buckets automatically based on extension and metadata.",
+      whyParagraph: "I wanted to build something that's more than just fetching data. A cloud storage app forces you to think about binary streams, mime-type validation, and managing state across server and client. Using Appwrite let me focus on the interesting orchestration part - how does a file actually get from someone's desktop to a secure bucket while keeping all the metadata searchable?",
+      buildStory: "The biggest surprise was how much the server/client boundary in Next.js 15 trips you up. Some of my auth code was accidentally trying to use browser APIs on the server. Refactoring that was a deep lesson in how these modern frameworks bridge the network gap. The file categorization engine was the fun part - it sorts uploads into logical buckets automatically based on extension and metadata.",
       learnings: [
         {
           title: "The server/client boundary is trickier than it looks",
@@ -822,7 +658,7 @@ read_string:
         },
         {
           title: "BaaS is really about the glue code",
-          desc: "Appwrite gives you primitives, but the real work is making sure a successful upload always has a matching database entry — and cleaning up if one fails. It's distributed transactionality, just at a smaller scale than it sounds."
+          desc: "Appwrite gives you primitives, but the real work is making sure a successful upload always has a matching database entry - and cleaning up if one fails. It's distributed transactionality, just at a smaller scale than it sounds."
         },
         {
           title: "MIME types are sneakier than you'd think",
@@ -843,7 +679,7 @@ read_string:
         {
           title: "File Ingestion & Metadata Mapping",
           label: "System Architecture",
-          desc: "When a file is uploaded, the system performs a multi-step orchestration: first, the binary is streamed to Appwrite Storage. Upon success, a Server Action triggers to create a document in the database with the file's URL, size, and account owner. We use a custom categorization engine to map the file's extension to one of four internal types—ensuring the dashboard remains organized automatically.",
+          desc: "When a file is uploaded, the system performs a multi-step orchestration: first, the binary is streamed to Appwrite Storage. Upon success, a Server Action triggers to create a document in the database with the file's URL, size, and account owner. We use a custom categorization engine to map the file's extension to one of four internal types - ensuring the dashboard remains organized automatically.",
           code: "const fileType = getFileType(file.name);\nconst bucketFile = await storage.createFile(BUCKET_ID, ID.unique(), file);\nawait database.createDocument(DB_ID, COL_ID, ID.unique(), {\n  name: file.name, type: fileType.type, url: getFileUrl(bucketFile.$id)\n});"
         },
         {
@@ -881,7 +717,7 @@ read_string:
       title: "MCPWatch",
       github: "https://github.com/StereoSachiiii/MCPWatch",
       tags: "Go · SQLite · JSON-RPC · Systems Proxy",
-      description: "Disclaimer: this is still a work in progress! It's a proxy that sits between you and an MCP server, logging everything the agent does. Right now it intercepts stdio pipes, but the goal is to make it work with any transport — I want to be able to watch what autonomous agents are actually doing.",
+      description: "Disclaimer: this is still a work in progress! It's a proxy that sits between you and an MCP server, logging everything the agent does. Right now it intercepts stdio pipes, but the goal is to make it work with any transport - I want to be able to watch what autonomous agents are actually doing.",
       stack: [
         { name: "Go", icon: <TechIcon name="go" /> },
         { name: "SQLite", icon: <TechIcon name="sqlite" /> },
@@ -892,12 +728,12 @@ read_string:
         { label: "Storage", value: "SQLite WAL", sub: "High-concurrency write-ahead logging" },
         { label: "Protocol", value: "JSON-RPC", sub: "Deep inspection of MCP method calls" }
       ],
-      whyParagraph: "As LLM agents get more autonomous, I think we need better ways to see what they're actually doing. MCPWatch started with MCP but the goal is bigger — whether it's a node script talking over stdio or a remote agent calling an HTTPS tool, it should be observable and searchable in real-time. It's not just a debugger, it's more like an audit layer for AI.",
-      buildStory: "I started this in another language but switched to Go because its concurrency model is perfect for this kind of thing. The core challenge was proxying stdio without blocking the process — io.TeeReader let me tap the stream for logging while the original command keeps running like I'm not there. SQLite's WAL mode was essential so the dashboard can read while the logger is writing.",
+      whyParagraph: "As LLM agents get more autonomous, I think we need better ways to see what they're actually doing. MCPWatch started with MCP but the goal is bigger - whether it's a node script talking over stdio or a remote agent calling an HTTPS tool, it should be observable and searchable in real-time. It's not just a debugger, it's more like an audit layer for AI.",
+      buildStory: "I started this in another language but switched to Go because its concurrency model is perfect for this kind of thing. The core challenge was proxying stdio without blocking the process - io.TeeReader let me tap the stream for logging while the original command keeps running like I'm not there. SQLite's WAL mode was essential so the dashboard can read while the logger is writing.",
       learnings: [
         {
           title: "TeeReader is the perfect primitive for this",
-          desc: "Proxying isn't just passing data — it's observing it without affecting the flow. io.TeeReader lets me tap the pipe for logging while the original command keeps receiving data like I'm not there. It's one of those stdlib gems that does exactly what you need."
+          desc: "Proxying isn't just passing data - it's observing it without affecting the flow. io.TeeReader lets me tap the pipe for logging while the original command keeps receiving data like I'm not there. It's one of those stdlib gems that does exactly what you need."
         },
         {
           title: "WAL mode is essential for live dashboards",
@@ -905,7 +741,7 @@ read_string:
         },
         {
           title: "You own the process lifecycle now",
-          desc: "Wrapping a process means you're responsible for its entire lifecycle. I had to learn how to properly propagate signals and wait for the child to exit before closing the database. If you don't wait correctly, you lose the last messages — which are usually the most important ones."
+          desc: "Wrapping a process means you're responsible for its entire lifecycle. I had to learn how to properly propagate signals and wait for the child to exit before closing the database. If you don't wait correctly, you lose the last messages - which are usually the most important ones."
         }
       ],
       limitations: [
@@ -984,7 +820,7 @@ read_string:
         { name: "Kubernetes", icon: <TechIcon name="kubernetes" /> },
         { name: "Linux", icon: <TechIcon name="linux" /> }
       ],
-      whyParagraph: "The best way to learn DevOps isn't by building things that work—it's by fixing things that broke. I wanted to create a sandbox where engineers can practice high-pressure troubleshooting without real-world stakes. It's about building the muscle memory for incident response.",
+      whyParagraph: "The best way to learn DevOps isn't by building things that work - it's by fixing things that broke. I wanted to create a sandbox where engineers can practice high-pressure troubleshooting without real-world stakes. It's about building the muscle memory for incident response.",
       learnings: [
         {
           title: "Observability is not just metrics",
@@ -999,7 +835,7 @@ read_string:
       title: "Piano Tiles",
       highlight: "pure fun, and experiments",
       tags: "JavaScript · HTML5 · CSS3 · GameDev",
-      description: "A simple clone of the Piano Tiles game. No high-performance systems, no complex backend — just a fun little project to practice DOM manipulation and event handling. Sometimes you just need to build something that moves.",
+      description: "A simple clone of the Piano Tiles game. No high-performance systems, no complex backend - just a fun little project to practice DOM manipulation and event handling. Sometimes you just need to build something that moves.",
       stack: [
         { name: "JavaScript", icon: <TechIcon name="javascript" /> },
         { name: "HTML5", icon: <TechIcon name="html5" /> },
@@ -1034,7 +870,7 @@ read_string:
       learnings: [
         {
           title: "End-to-End Pipeline Setup",
-          desc: "Handling the full lifecycle of a machine learning project — from data preparation to inference — is often more complex than the model training itself."
+          desc: "Handling the full lifecycle of a machine learning project - from data preparation to inference - is often more complex than the model training itself."
         }
       ]
     }
@@ -1055,18 +891,27 @@ read_string:
       description: "What happens when you can't use half of C++? A look at the features that are straight-up banned in medical and aerospace software, and why."
     },
     {
-      id: 3,
-      title: "My Journey into the Machine: Building an OS from Scratch",
-      date: "Aug 2024",
-      url: "https://medium.com/@niroshasulochini/my-journey-into-the-machine-a1b2c3d4e5f6",
-      description: "Writing about what it was actually like to build a kernel from scratch. The BIOS interrupts, the VGA driver, and the many times I had no idea what was going on."
-    },
-    {
       id: 4,
       title: "How Mathematics is Predicting Wildfire Paths",
       date: "Jul 2024",
       url: "https://medium.com/@niroshasulochini/wildfire-prediction-a1b2c3d4e5f6",
       description: "I found some really interesting papers from ICAPS 2025 about predicting wildfire paths with differential equations and spatial data. Tried to explain the math in a way that makes sense."
+    }
+  ],
+  experience: [
+    {
+      id: "choreo",
+      role: "Software Engineer Intern",
+      company: "WSO2 / choreolabs",
+      subtitle: "Formerly known as WSO2 / choreolabs",
+      team: "OpenChoreo Team",
+      period: "Present",
+      description: "Contributing as a Software Engineer Intern in the OpenChoreo team, working on developer platform tools, cloud-native infrastructure, and internal engineering services.",
+      highlights: [
+        "Software Engineer Intern within the OpenChoreo engineering team.",
+        "Working on cloud-native systems, platform tooling, and microservice infrastructure.",
+        "Collaborating across teams on distributed architecture and reliability."
+      ]
     }
   ],
   fullStack: [
@@ -1079,8 +924,7 @@ read_string:
         { name: "Java", icon: <TechIcon name="java" />, projects: [{ id: "reservation", title: "Book Fair Reservation", context: "Spring Boot & WebSocket sync" }] },
         { name: "TypeScript", icon: <TechIcon name="typescript" />, projects: [{ id: "storeit", title: "StoreIt", context: "Next.js 15 Server Actions" }] },
         { name: "PHP", icon: <TechIcon name="php" />, projects: [{ id: "royal-liquor", title: "Royal Beverages", context: "Custom MVC framework" }] },
-        { name: "JavaScript", icon: <TechIcon name="javascript" />, projects: [{ id: "royal-liquor", title: "Royal Beverages", context: "Vanilla JS SPA dashboard" }, { id: "piano-tiles", title: "Piano Tiles", context: "DOM manipulation & event handling" }] },
-        { name: "x86 Assembly", icon: <Binary size={24} />, projects: [{ id: "luckyos", title: "LuckyOS", context: "Bootloader & VGA drivers" }] }
+        { name: "JavaScript", icon: <TechIcon name="javascript" />, projects: [{ id: "royal-liquor", title: "Royal Beverages", context: "Vanilla JS SPA dashboard" }, { id: "piano-tiles", title: "Piano Tiles", context: "DOM manipulation & event handling" }] }
       ]
     },
     {

@@ -18,7 +18,7 @@ const EQ = () => {
     >
       {Array.from({ length: bars }).map((_, i) => {
         const t = i / bars;
-        // frequency shape: bass (0–0.15), mid scoop (0.15–0.45), synth (0.45–0.85), highs (0.85–1)
+        // frequency shape: bass (0 - 0.15), mid scoop (0.15 - 0.45), synth (0.45 - 0.85), highs (0.85 - 1)
         let baseH, randH, speed, isBass;
         if (t < 0.15)       { baseH = 60; randH = 40; speed = 0.5;                        isBass = t < 0.06; }
         else if (t < 0.45)  { baseH = 15; randH = 15; speed = 0.8 + Math.random();        isBass = false; }
@@ -95,7 +95,7 @@ const StackSection = memo(({ onProjectClick }) => {
   );
 });
 
-// Moved outside — never recreated on render
+// Moved outside - never recreated on render
 const categoryStyles = {
   SYSTEMS: { tag: 'bg-zinc-100 text-zinc-600 border border-zinc-200' },
   OS: { tag: 'bg-slate-100 text-slate-600 border border-slate-200' },
@@ -104,7 +104,7 @@ const categoryStyles = {
   EXPERIMENTS: { tag: 'bg-stone-100 text-stone-600 border border-stone-200' }
 };
 
-// Thin top bar that sweeps across on mount — like a compiler running
+// Thin top bar that sweeps across on mount - like a compiler running
 const LoadingBar = () => {
   const [done, setDone] = useState(false);
   useEffect(() => { const t = setTimeout(() => setDone(true), 900); return () => clearTimeout(t); }, []);
@@ -122,7 +122,7 @@ const LoadingBar = () => {
   );
 };
 
-// Memoized — only re-renders when its own project data changes
+// Memoized - only re-renders when its own project data changes
 const ProjectCard = memo(({ project, onClick, onHoverStart, onHoverEnd }) => {
   const style = categoryStyles[project.category] || categoryStyles.WEB;
   const [isHovered, setIsHovered] = useState(false);
@@ -254,7 +254,7 @@ export default function App() {
     <>
     <LoadingBar />
     
-    {/* Global Pump Overlay — desktop only */}
+    {/* Global Pump Overlay - desktop only */}
     <AnimatePresence>
       {isGlobalCardHovered && (
         <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden hidden lg:block">
@@ -270,8 +270,8 @@ export default function App() {
               animate={{ scale: [1, 1.08, 1], opacity: 0.12, rotate: corner.rot }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ opacity: { duration: 0.3 }, scale: { duration: 0.5, repeat: Infinity, ease: "easeInOut" } }}
-              className={`absolute ${corner.pos} text-pink-400`}
-              style={{ filter: 'drop-shadow(0 0 8px rgba(244, 114, 182, 0.4)) drop-shadow(0 0 20px rgba(236, 72, 153, 0.2))' }}
+              className={`absolute ${corner.pos} text-yellow-500`}
+              style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.4)) drop-shadow(0 0 20px rgba(202, 138, 4, 0.2))' }}
             >
               <Megaphone size={64} strokeWidth={1.5} />
             </motion.div>
@@ -281,10 +281,10 @@ export default function App() {
     </AnimatePresence>
 
     <div
-      className="min-h-screen bg-pink-50 text-black selection:bg-black selection:text-white relative overflow-x-hidden"
+      className="min-h-screen bg-[var(--color-canvas)] text-black selection:bg-black selection:text-white relative"
       onMouseMove={handleMouseMove}
     >
-      {/* Background Video with Parallax — loads async, fades in once ready */}
+      {/* Background Video with Parallax - loads async, fades in once ready */}
       <motion.div className="fixed inset-0 z-0 pointer-events-none" style={{ x, y }}>
         <motion.video
           autoPlay muted loop playsInline
@@ -295,11 +295,11 @@ export default function App() {
         >
           <source src="/tinywow_vecteezy_clean-backdrop-loop_13695175_89813285.mp4" type="video/mp4" />
         </motion.video>
-        {/* Subtle scrim — much lighter so video shows through */}
-        <div className="absolute inset-0 bg-pink-50/60"></div>
+        {/* Subtle scrim - much lighter so video shows through */}
+        <div className="absolute inset-0 bg-[var(--color-canvas)]/60"></div>
       </motion.div>
 
-      <main className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] items-start gap-6 md:gap-8 lg:gap-16 xl:gap-20 min-w-0 overflow-x-hidden">
+      <main className="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr] items-start gap-6 md:gap-8 lg:gap-16 xl:gap-20 min-w-0">
         <Identity 
           identity={data.identity} 
           className="min-w-0 w-full" 
@@ -307,41 +307,41 @@ export default function App() {
           onHoverEnd={() => setIsGlobalCardHovered(false)}
         />
 
-        <div className="flex flex-col py-8 md:py-16 min-h-screen min-w-0 w-full max-w-full overflow-x-hidden">
+        <div className="flex flex-col pt-2 pb-8 md:pt-4 md:pb-16 min-h-screen min-w-0 w-full max-w-full">
+          <div className="sticky top-0 z-40 pt-3 pb-2 mb-6 md:mb-10 backdrop-blur-md bg-[var(--color-canvas)]/80 -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">
+            <nav className="flex flex-wrap gap-3 sm:gap-5 md:gap-8 lg:gap-12 w-full max-w-full relative">
+              {['projects', 'stack', 'experience', 'writing', 'contact'].map((t, i) => (
+                <button
+                  key={t}
+                  onClick={() => {
+                    setSelectedProject(null);
+                    setTab(t);
+                  }}
+                  className={`pb-3 md:pb-4 transition-all relative group flex items-baseline gap-1 md:gap-1.5 ${
+                    tab === t && !selectedProject ? 'text-black' : 'text-black/40 hover:text-black/80'
+                  }`}
+                >
+                  <span className="text-[8px] md:text-[9px] font-mono font-bold opacity-60 group-hover:opacity-100 transition-opacity">
+                    0{i + 1}
+                  </span>
+                  <span className="text-sm md:text-lg lg:text-xl xl:text-2xl font-black tracking-tighter uppercase whitespace-nowrap">{t}</span>
+                  {/* Active tab underline - layoutId slides it between tabs */}
+                  {tab === t && !selectedProject && (
+                    <motion.div
+                      layoutId="tab-underline"
+                      className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full"
+                      style={{ background: '#000000', boxShadow: '0 0 10px rgba(0, 0, 0, 0.35)' }}
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+                    />
+                  )}
+                </button>
+              ))}
+            </nav>
+          </div>
+
           <AnimatePresence mode="wait">
             {!selectedProject ? (
-              <motion.div
-                key="list"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <nav className="flex flex-wrap gap-3 sm:gap-5 md:gap-8 lg:gap-12 mb-10 md:mb-16 px-2 md:px-0 w-full max-w-full relative">
-                  {['projects', 'stack', 'writing', 'contact'].map((t, i) => (
-                    <button
-                      key={t}
-                      onClick={() => setTab(t)}
-                      className={`pb-4 md:pb-6 transition-all relative group flex items-baseline gap-1 md:gap-1.5 ${
-                        tab === t ? 'text-black' : 'text-black/40 hover:text-black/80'
-                      }`}
-                    >
-                      <span className="text-[8px] md:text-[9px] font-mono font-bold opacity-60 group-hover:opacity-100 transition-opacity">
-                        0{i + 1}
-                      </span>
-                      <span className="text-sm md:text-lg lg:text-xl xl:text-2xl font-black tracking-tighter uppercase whitespace-nowrap">{t}</span>
-                      {/* Active tab underline — layoutId slides it between tabs */}
-                      {tab === t && (
-                        <motion.div
-                          layoutId="tab-underline"
-                          className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full"
-                          style={{ background: 'linear-gradient(90deg, #ff1493, #ff69b4)', boxShadow: '0 0 8px rgba(255,20,147,0.7)' }}
-                          transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </nav>
+              <div key="list" className="w-full">
 
                 {tab === 'projects' ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pb-20">
@@ -368,6 +368,39 @@ export default function App() {
                       }
                     }}
                   />
+                ) : tab === 'experience' ? (
+                  <div className="grid gap-6 max-w-3xl">
+                    {data.experience?.map((exp) => (
+                      <div
+                        key={exp.id}
+                        className="border border-black/15 bg-white/40 backdrop-blur-sm p-6 sm:p-8 rounded-2xl space-y-4 hover:border-black/30 transition-colors shadow-sm"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 border-b border-black/10 pb-4">
+                          <div>
+                            <h3 className="text-xl sm:text-2xl font-bold text-black tracking-tight">{exp.role}</h3>
+                            <p className="text-sm font-semibold text-black/80 mt-0.5">
+                              {exp.company} <span className="text-black/50 font-normal">· {exp.team}</span>
+                            </p>
+                            <p className="text-xs text-black/60 italic mt-0.5">{exp.subtitle}</p>
+                          </div>
+                          <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-full bg-black/5 border border-black/10 w-fit self-start sm:self-auto">
+                            {exp.period}
+                          </span>
+                        </div>
+                        <p className="text-sm text-black/80 leading-relaxed">{exp.description}</p>
+                        {exp.highlights && exp.highlights.length > 0 && (
+                          <ul className="space-y-2 pt-2">
+                            {exp.highlights.map((h, idx) => (
+                              <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-black/75">
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-black/60 mt-1.5 shrink-0" />
+                                <span>{h}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 ) : tab === 'contact' ? (
                   <Contact links={data.identity.links} />
                 ) : (
@@ -389,7 +422,7 @@ export default function App() {
                     ))}
                   </div>
                 )}
-              </motion.div>
+              </div>
             ) : (
               <ProjectDetail
                 project={selectedProject}

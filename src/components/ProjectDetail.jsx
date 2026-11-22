@@ -35,7 +35,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       className="w-full relative min-w-0"
     >
       {/* Sticky Action Bar */}
-      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-pink-50/90 backdrop-blur-md border-b border-black/5 overflow-hidden">
+      <div className="sticky top-0 z-50 flex justify-between items-center py-3 md:py-6 mb-8 md:mb-12 bg-[var(--color-canvas)]/90 backdrop-blur-md border-b border-black/5 overflow-hidden">
         <button 
           onClick={onBack}
           className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.4em] text-black border border-black/10 px-4 md:px-6 py-2 md:py-2.5 rounded-full hover:bg-black hover:text-white transition-all flex items-center gap-1.5 md:gap-2 group"
@@ -56,7 +56,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
       <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-6">
         <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold tracking-tighter text-black leading-tight break-words">{project.title}</h2>
 
-        {/* Card deck — click to jump to screenshots */}
+        {/* Card deck - click to jump to screenshots */}
         {project.screenshots && (
           <motion.button
             onClick={scrollToScreenshots}
@@ -246,7 +246,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
               {/* Main Content Flow */}
               <div className="space-y-24 min-w-0">
 
-                {/* 0. What is this — plain English for non-technical readers */}
+                {/* 0. What is this - plain English for non-technical readers */}
                 {project.whatIsThis && (
                   <div className="max-w-2xl space-y-3">
                     <p className="text-[10px] font-mono font-bold tracking-[0.25em] text-black/30 uppercase">What is this?</p>
@@ -254,7 +254,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
                   </div>
                 )}
 
-                {/* 0b. Interactive 3-layer diagram — data driven from project.overviewLayers */}
+                {/* 0b. Interactive 3-layer diagram - data driven from project.overviewLayers */}
                 {project.overviewLayers && (
                   <div className="space-y-6">
                     <p className="text-[10px] font-mono font-bold tracking-[0.25em] text-black/30 uppercase">How it's built</p>
@@ -444,7 +444,7 @@ export const ProjectDetail = ({ project, view, setView, onBack }) => {
             </div>
           ) : (
             <div className="space-y-24 min-w-0">
-              {/* Detailed architecture diagram — controlled by project.showArchDiagram */}
+              {/* Detailed architecture diagram - controlled by project.showArchDiagram */}
               {project.showArchDiagram && (
                 <div className="space-y-4">
                   <h4 className="text-[15px] font-mono font-bold tracking-widest text-black">Request Flow</h4>

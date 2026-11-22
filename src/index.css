@@ -21,20 +21,36 @@ html.lenis, html.lenis body {
 }
 
 @theme {
-  --color-background: #ffffff;
+  --color-canvas: #f4d940;               /* LoFli warm golden yellow (#f4d940) */
+  --color-canvas-subtle: #fae465;        /* Soft lighter tint */
+  --color-accent: #e5c627;               /* Richer gold accent */
+  --color-accent-hover: #c9ab14;         /* Deep yellow hover */
+  --color-accent-subtle: rgba(244, 217, 64, 0.4);
+  
+  --color-background: var(--color-canvas);
   --color-foreground: #000000;
   --font-inter: "Inter", sans-serif;
+  --font-heading: "Playfair Display", Georgia, serif;
   --breakpoint-xs: 480px;
 }
 
 :root {
-  font-family: var(--font-inter);
+  --color-canvas: #f4d940;
+  --color-canvas-subtle: #fae465;
+  --color-accent: #e5c627;
+  --color-accent-hover: #c9ab14;
+  --color-accent-subtle: rgba(244, 217, 64, 0.4);
+
+  --font-body: var(--font-inter);
+  --font-heading: "Playfair Display", Georgia, serif;
+
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light;
   color: #000000;
-  background-color: #ffffff;
+  background-color: var(--color-canvas);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -45,22 +61,25 @@ html.lenis, html.lenis body {
 html {
   max-width: 100%;
   width: 100%;
-  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  overflow-x: hidden;
+  font-family: var(--font-body);
 }
 
 #root {
   width: 100%;
-  overflow-x: hidden;
 }
 
 * {
-  font-family: var(--font-inter) !important;
+  font-family: inherit;
+}
+
+/* Headings tokenization */
+h1, h2, h3, .font-heading {
+  font-family: var(--font-heading) !important;
 }
 
 /* Utilities */
@@ -90,11 +109,11 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  border: 1px solid rgba(255, 179, 198, 0.2); 
+  border: 1px solid rgba(244, 217, 64, 0.5); 
   box-shadow: 
-    0 0 0 6px rgba(255, 179, 198, 0.25),
-    0 0 0 14px rgba(255, 179, 198, 0.1),
-    0 0 0 22px rgba(255, 179, 198, 0.05);
+    0 0 0 6px rgba(244, 217, 64, 0.35),
+    0 0 0 14px rgba(244, 217, 64, 0.2),
+    0 0 0 22px rgba(244, 217, 64, 0.08);
   opacity: 0;
   pointer-events: none;
   z-index: -1;
